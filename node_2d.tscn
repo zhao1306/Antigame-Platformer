@@ -1,3 +1,39 @@
-[gd_scene format=3 uid="uid://wgbf1aaqpkev"]
+[gd_scene load_steps=6 format=3 uid="uid://wgbf1aaqpkev"]
+
+[ext_resource type="Script" uid="uid://d3akxcp6d5n4a" path="res://player.gd" id="1_wtcfe"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_0e48y"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_epypp"]
+radius = 7.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0hol4"]
+size = Vector2(313, 20)
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_q6r6c"]
 
 [node name="Node2D" type="Node2D"]
+
+[node name="Player" type="CharacterBody2D" parent="."]
+script = ExtResource("1_wtcfe")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player"]
+position = Vector2(-5.9604616e-08, -1.4305115e-06)
+scale = Vector2(14, 29.999998)
+texture = SubResource("PlaceholderTexture2D_0e48y")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("CapsuleShape2D_epypp")
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+
+[node name="Ground" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
+position = Vector2(47.5, 32)
+shape = SubResource("RectangleShape2D_0hol4")
+
+[node name="Sprite2D" type="Sprite2D" parent="Ground"]
+position = Vector2(47.624992, 31.750002)
+scale = Vector2(310.75, 18.500002)
+texture = SubResource("PlaceholderTexture2D_q6r6c")
