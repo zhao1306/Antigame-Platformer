@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://nq2yeas7rrae"
+path="res://.godot/imported/Underground_Loop.ogg-ade73be2d67bcb775892e86ba6a3441b.oggvorbisstr"
+
+[deps]
+
+source_file="res://Assets (Little Runmo)/8_Music_Sound Effects/Songs/Underground_Loop.ogg"
+dest_files=["res://.godot/imported/Underground_Loop.ogg-ade73be2d67bcb775892e86ba6a3441b.oggvorbisstr"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dwykdsa1mf53j"
+path="res://.godot/imported/Pikit_Outro.wav-5d5c3a3847c5bb74435a12575eceb5e5.sample"
+
+[deps]
+
+source_file="res://Assets (Little Runmo)/8_Music_Sound Effects/Pikit_Outro.wav"
+dest_files=["res://.godot/imported/Pikit_Outro.wav-5d5c3a3847c5bb74435a12575eceb5e5.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

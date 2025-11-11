@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ceca8gg2dw0qh"
+path="res://.godot/imported/Marble_Appearing_Background.mp3-5e1fb0cac891a5ec42f5fed6b4e28a83.mp3str"
+
+[deps]
+
+source_file="res://Assets (Little Runmo)/8_Music_Sound Effects/Music/Marble_Appearing_Background.mp3"
+dest_files=["res://.godot/imported/Marble_Appearing_Background.mp3-5e1fb0cac891a5ec42f5fed6b4e28a83.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

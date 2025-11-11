@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://brb8kob3iiaeo"
+path="res://.godot/imported/Big_Step.wav-7f0b025f435ca9da6ad7e47527b94966.sample"
+
+[deps]
+
+source_file="res://Assets (Little Runmo)/8_Music_Sound Effects/Big_Step.wav"
+dest_files=["res://.godot/imported/Big_Step.wav-7f0b025f435ca9da6ad7e47527b94966.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

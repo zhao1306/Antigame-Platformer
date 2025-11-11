@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bhlbhy2f52sja"
+path="res://.godot/imported/Marble_Eyes_Voice_6.wav-35ad7efb9ab5a86b9f99f0a3b871c67a.sample"
+
+[deps]
+
+source_file="res://Assets (Little Runmo)/8_Music_Sound Effects/Marble_Eyes_Voice_6.wav"
+dest_files=["res://.godot/imported/Marble_Eyes_Voice_6.wav-35ad7efb9ab5a86b9f99f0a3b871c67a.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

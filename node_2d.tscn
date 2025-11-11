@@ -1,5 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://wgbf1aaqpkev"]
+[gd_scene load_steps=7 format=3 uid="uid://wgbf1aaqpkev"]
 
+[ext_resource type="Script" uid="uid://bshtk55v4lnpt" path="res://MainScene.gd" id="1_0e48y"]
 [ext_resource type="Script" uid="uid://d3akxcp6d5n4a" path="res://player.gd" id="1_wtcfe"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_0e48y"]
@@ -7,14 +8,23 @@
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_epypp"]
 radius = 7.0
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_0hol4"]
-size = Vector2(313, 20)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wtcfe"]
+size = Vector2(1341, 106)
 
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_q6r6c"]
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_epypp"]
 
-[node name="Node2D" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
+size = Vector2(3679, 12)
 
-[node name="Player" type="CharacterBody2D" parent="."]
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ground"]
+
+[node name="MainScene (Node2D)" type="Node2D"]
+script = ExtResource("1_0e48y")
+
+[node name="PuzzleRoom_1_CamTarget" type="Marker2D" parent="."]
+position = Vector2(563, -32)
+
+[node name="Player" type="CharacterBody2D" parent="." groups=["player"]]
 script = ExtResource("1_wtcfe")
 
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
@@ -25,15 +35,33 @@ texture = SubResource("PlaceholderTexture2D_0e48y")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 shape = SubResource("CapsuleShape2D_epypp")
 
-[node name="Camera2D" type="Camera2D" parent="Player"]
+[node name="Camera2D" type="Camera2D" parent="Player" groups=["main_camera"]]
+position_smoothing_enabled = true
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+drag_top_margin = 0.1
+drag_bottom_margin = 0.4
 
-[node name="Ground" type="StaticBody2D" parent="."]
+[node name="Ground (StaticBody2D)" type="StaticBody2D" parent="."]
+position = Vector2(300, 0)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
-position = Vector2(47.5, 32)
-shape = SubResource("RectangleShape2D_0hol4")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground (StaticBody2D)"]
+position = Vector2(-158.5, 28)
+shape = SubResource("RectangleShape2D_ground")
 
-[node name="Sprite2D" type="Sprite2D" parent="Ground"]
-position = Vector2(47.624992, 31.750002)
-scale = Vector2(310.75, 18.500002)
-texture = SubResource("PlaceholderTexture2D_q6r6c")
+[node name="Sprite2D" type="Sprite2D" parent="Ground (StaticBody2D)"]
+position = Vector2(-148.56262, 30.75)
+scale = Vector2(3654.875, 16.499996)
+texture = SubResource("PlaceholderTexture2D_ground")
+
+[node name="PuzzleRoom_1_Trigger" type="Area2D" parent="."]
+position = Vector2(533, 119)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PuzzleRoom_1_Trigger"]
+position = Vector2(24, -153)
+shape = SubResource("RectangleShape2D_wtcfe")
+
+[node name="Sprite2D" type="Sprite2D" parent="PuzzleRoom_1_Trigger"]
+position = Vector2(685.125, -213.625)
+scale = Vector2(22.250034, 10.749997)
+texture = SubResource("PlaceholderTexture2D_epypp")

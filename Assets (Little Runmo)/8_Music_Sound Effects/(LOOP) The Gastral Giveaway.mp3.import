@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://d03wj22rolv6v"
+path="res://.godot/imported/(LOOP) The Gastral Giveaway.mp3-e50d29d887427351d1a41b34f140a3be.mp3str"
+
+[deps]
+
+source_file="res://Assets (Little Runmo)/8_Music_Sound Effects/(LOOP) The Gastral Giveaway.mp3"
+dest_files=["res://.godot/imported/(LOOP) The Gastral Giveaway.mp3-e50d29d887427351d1a41b34f140a3be.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

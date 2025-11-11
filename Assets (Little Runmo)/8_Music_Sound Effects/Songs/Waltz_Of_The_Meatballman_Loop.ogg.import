@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dsn23whpr4g80"
+path="res://.godot/imported/Waltz_Of_The_Meatballman_Loop.ogg-73a4c16286c1b60649aeb39b7575b1ea.oggvorbisstr"
+
+[deps]
+
+source_file="res://Assets (Little Runmo)/8_Music_Sound Effects/Songs/Waltz_Of_The_Meatballman_Loop.ogg"
+dest_files=["res://.godot/imported/Waltz_Of_The_Meatballman_Loop.ogg-73a4c16286c1b60649aeb39b7575b1ea.oggvorbisstr"]
+
+[params]
+
+loop=true
+loop_offset=43.2
+bpm=0
+beat_count=0
+bar_beats=4

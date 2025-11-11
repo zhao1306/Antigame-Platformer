@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bjbvdp436p6lg"
+path="res://.godot/imported/Rolling_Stone.ogg-397f2b5aed6ba2895db8b3fb739854c6.oggvorbisstr"
+
+[deps]
+
+source_file="res://Assets (Little Runmo)/8_Music_Sound Effects/Rolling_Stone.ogg"
+dest_files=["res://.godot/imported/Rolling_Stone.ogg-397f2b5aed6ba2895db8b3fb739854c6.oggvorbisstr"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

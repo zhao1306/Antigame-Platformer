@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bfebt55ckb0kx"
+path="res://.godot/imported/Stone_Clash.ogg-e422c5f7d080de426a3464625d81a548.oggvorbisstr"
+
+[deps]
+
+source_file="res://Assets (Little Runmo)/8_Music_Sound Effects/Stone_Clash.ogg"
+dest_files=["res://.godot/imported/Stone_Clash.ogg-e422c5f7d080de426a3464625d81a548.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

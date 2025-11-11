@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bikc2exyi6bho"
+path="res://.godot/imported/Enemy_Death.wav-890fbb3fe2a7f901e62c6a2e8f76ebea.sample"
+
+[deps]
+
+source_file="res://Assets (Little Runmo)/8_Music_Sound Effects/Enemy_Death.wav"
+dest_files=["res://.godot/imported/Enemy_Death.wav-890fbb3fe2a7f901e62c6a2e8f76ebea.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

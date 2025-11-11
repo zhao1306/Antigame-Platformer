@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://43s6658yvntp"
+path="res://.godot/imported/Roll.wav-86a121d374524f2f24034d9ad1abe2fe.sample"
+
+[deps]
+
+source_file="res://Assets (Little Runmo)/8_Music_Sound Effects/Roll.wav"
+dest_files=["res://.godot/imported/Roll.wav-86a121d374524f2f24034d9ad1abe2fe.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

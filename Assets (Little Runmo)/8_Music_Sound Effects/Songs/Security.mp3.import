@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bfo8ekuo6abrf"
+path="res://.godot/imported/Security.mp3-d2af851172461a8070bd8053a6db00a2.mp3str"
+
+[deps]
+
+source_file="res://Assets (Little Runmo)/8_Music_Sound Effects/Songs/Security.mp3"
+dest_files=["res://.godot/imported/Security.mp3-d2af851172461a8070bd8053a6db00a2.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

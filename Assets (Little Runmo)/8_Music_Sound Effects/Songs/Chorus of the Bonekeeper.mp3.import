@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://br4r21a2xsr7f"
+path="res://.godot/imported/Chorus of the Bonekeeper.mp3-24dd1a618d1f042e0f351d65cf1386fa.mp3str"
+
+[deps]
+
+source_file="res://Assets (Little Runmo)/8_Music_Sound Effects/Songs/Chorus of the Bonekeeper.mp3"
+dest_files=["res://.godot/imported/Chorus of the Bonekeeper.mp3-24dd1a618d1f042e0f351d65cf1386fa.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

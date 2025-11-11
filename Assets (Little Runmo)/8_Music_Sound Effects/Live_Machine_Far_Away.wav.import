@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://b3i5q3xr525r3"
+path="res://.godot/imported/Live_Machine_Far_Away.wav-392db7d9778695cf75fa7d213d0d8ccb.sample"
+
+[deps]
+
+source_file="res://Assets (Little Runmo)/8_Music_Sound Effects/Live_Machine_Far_Away.wav"
+dest_files=["res://.godot/imported/Live_Machine_Far_Away.wav-392db7d9778695cf75fa7d213d0d8ccb.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=2
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

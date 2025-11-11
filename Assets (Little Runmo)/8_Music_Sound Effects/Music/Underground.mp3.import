@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bmhd7n7jwx5l1"
+path="res://.godot/imported/Underground.mp3-fe32dfc562ad588f0462ede837e08fb1.mp3str"
+
+[deps]
+
+source_file="res://Assets (Little Runmo)/8_Music_Sound Effects/Music/Underground.mp3"
+dest_files=["res://.godot/imported/Underground.mp3-fe32dfc562ad588f0462ede837e08fb1.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

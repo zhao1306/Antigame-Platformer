@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bit5p550mtupj"
+path="res://.godot/imported/The Wreckingball Lullaby.mp3-64bbb42308818f559e9672ad712370ff.mp3str"
+
+[deps]
+
+source_file="res://Assets (Little Runmo)/8_Music_Sound Effects/Songs/The Wreckingball Lullaby.mp3"
+dest_files=["res://.godot/imported/The Wreckingball Lullaby.mp3-64bbb42308818f559e9672ad712370ff.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

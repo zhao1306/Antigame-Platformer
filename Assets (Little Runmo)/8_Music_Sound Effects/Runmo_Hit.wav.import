@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bjx7v2h7oquhn"
+path="res://.godot/imported/Runmo_Hit.wav-dbd246629c83f30ca6fb64c98eda02d4.sample"
+
+[deps]
+
+source_file="res://Assets (Little Runmo)/8_Music_Sound Effects/Runmo_Hit.wav"
+dest_files=["res://.godot/imported/Runmo_Hit.wav-dbd246629c83f30ca6fb64c98eda02d4.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

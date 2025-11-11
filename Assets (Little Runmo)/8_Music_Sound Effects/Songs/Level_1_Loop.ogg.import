@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dg64y86xt0p2h"
+path="res://.godot/imported/Level_1_Loop.ogg-4e377da36760f98fe0b04a00b3d28060.oggvorbisstr"
+
+[deps]
+
+source_file="res://Assets (Little Runmo)/8_Music_Sound Effects/Songs/Level_1_Loop.ogg"
+dest_files=["res://.godot/imported/Level_1_Loop.ogg-4e377da36760f98fe0b04a00b3d28060.oggvorbisstr"]
+
+[params]
+
+loop=true
+loop_offset=2.4
+bpm=0
+beat_count=0
+bar_beats=4

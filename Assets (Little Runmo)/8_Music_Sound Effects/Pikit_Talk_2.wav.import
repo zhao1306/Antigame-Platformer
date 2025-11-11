@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dpkkcwdu6fpmd"
+path="res://.godot/imported/Pikit_Talk_2.wav-97c9853a9668762fc4f9ee5fc3be271d.sample"
+
+[deps]
+
+source_file="res://Assets (Little Runmo)/8_Music_Sound Effects/Pikit_Talk_2.wav"
+dest_files=["res://.godot/imported/Pikit_Talk_2.wav-97c9853a9668762fc4f9ee5fc3be271d.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0
