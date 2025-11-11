@@ -30,7 +30,13 @@ func _run():
 		scene_instance.queue_free()
 		return
 	
+	# Ensure physics layer 0 exists
+	if tileset.get_physics_layers_count() == 0:
+		print("Adding physics layer 0...")
+		tileset.add_physics_layer()
+	
 	print("Found TileSet with ", tileset.get_source_count(), " sources")
+	print("Physics layers: ", tileset.get_physics_layers_count())
 	
 	var tiles_processed = 0
 	
@@ -64,7 +70,12 @@ func _run():
 					
 					# Check if this tile exists in the atlas
 					if atlas_source.has_tile(atlas_coords):
-						# Create a rectangle polygon covering the full tile
+						# Get the tile data
+						var tile_data = atlas_source.get_tile_data(atlas_coords, 0)
+						
+						if not tile_data:
+							continue
+						
 						# Physics layer 0
 						var physics_layer = 0
 						
@@ -77,8 +88,11 @@ func _run():
 							Vector2(-half_size.x, half_size.y)    # Bottom-left
 						])
 						
-						# Set the physics polygon for this tile
-						atlas_source.set_tile_physics_polygon_points(physics_layer, atlas_coords, 0, polygon)
+						# Add collision polygon (always add, it's safe to call multiple times)
+						tile_data.add_collision_polygon(physics_layer)
+						
+						# Set the physics polygon points (Godot 4 API)
+						tile_data.set_collision_polygon_points(physics_layer, 0, polygon)
 						
 						tiles_processed += 1
 	
@@ -95,4 +109,3 @@ func _run():
 		print("ERROR saving scene: ", error)
 	
 	scene_instance.queue_free()
-
