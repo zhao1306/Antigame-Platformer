@@ -3,38 +3,36 @@ extends CharacterBody2D
 # === EXPORT VARIABLES ===
 @export_category("Movement")
 @export_range(50, 500) var max_speed: float = 200.0
-@export_range(100, 5000) var x_acceleration: float = 1500.0  # Horizontal acceleration (pixels/sec²)
-@export_range(100, 5000) var x_friction: float = 1200.0  # Ground friction
+@export_range(100, 5000) var x_acceleration: float = 1500.0  # Base horizontal acceleration (px/s²)
+@export_range(100, 5000) var x_friction: float = 4000.0      # Base friction (px/s²)
 
 @export_category("Jumping and Gravity")
-@export_range(100, 1000) var jump_height: float = 200.0  # Target jump height (pixels)
-@export_range(100, 3000) var gravity: float = 800.0  # Downward gravity force (pixels/sec²)
+@export_range(100, 5000) var jump_height: float = 500.0        # Desired jump apex height (px)
+@export_range(100, 3000) var y_acceleration: float = 800.0    # Base vertical acceleration (px/s²)
 @export_range(100, 2000) var terminal_velocity: float = 600.0
-@export_range(0.5, 3) var gravity_fall_multiplier: float = 1.5  # Gravity stronger when falling
 
 # === INTERNAL VARIABLES ===
 var time_manager: Node
-var jump_velocity: float  # Calculated from jump_height
 
 func _ready():
 	time_manager = get_node("/root/TimeStateManager")
 	
-	# Calculate jump velocity from desired height using physics:
-	# At peak: v = 0, height h = v₀²/(2g)
-	# Therefore: v₀ = sqrt(2×g×h)
-	jump_velocity = sqrt(2.0 * gravity * jump_height)
-	
-	print("Player ready! Jump velocity: ", jump_velocity, " for height: ", jump_height)
+	print("Player ready! jump_height=", jump_height, " y_accel=", y_acceleration)
 
 func _physics_process(delta):
 	# Get time scale
 	var time_scale = time_manager.get_time_scale() if time_manager else 1.0
-	var scaled_delta = delta * time_scale
+	var accel_scale = pow(time_scale, 2)  # Maintain distance when time stretches
+	var slowness_factor = 1.0
+	if time_scale != 0.0:
+		slowness_factor = 1.0 / time_scale
 	
 	# Scaled values
 	var scaled_max_speed = max_speed * time_scale
 	var scaled_terminal_velocity = terminal_velocity * time_scale
-	# Jump velocity NOT scaled - this is the key to consistent height
+	var effective_x_accel = x_acceleration * accel_scale
+	var effective_x_friction = x_friction * accel_scale
+	var effective_y_accel = y_acceleration / (slowness_factor * slowness_factor)
 	
 	# === INPUT ===
 	var move_input = Input.get_axis("ui_left", "ui_right")
@@ -42,13 +40,18 @@ func _physics_process(delta):
 	
 	# === HORIZONTAL ACCELERATION ===
 	if move_input != 0:
-		# Horizontal acceleration uses BASE delta for consistent feel
-		velocity.x += move_input * x_acceleration * delta
-		velocity.x = clamp(velocity.x, -scaled_max_speed, scaled_max_speed)
+		var same_direction = (move_input > 0 and velocity.x >= 0) or (move_input < 0 and velocity.x <= 0)
+		var can_accelerate = true
+		if same_direction and abs(velocity.x) >= scaled_max_speed:
+			can_accelerate = false
+		
+		if can_accelerate:
+			velocity.x += move_input * effective_x_accel * delta
+			if is_on_floor():
+				velocity.x = clamp(velocity.x, -scaled_max_speed, scaled_max_speed)
 	else:
 		if is_on_floor():
-			# Friction uses BASE delta
-			var friction_force = x_friction * delta
+			var friction_force = effective_x_friction * delta
 			if abs(velocity.x) <= friction_force:
 				velocity.x = 0
 			else:
@@ -56,19 +59,16 @@ func _physics_process(delta):
 	
 	# === GRAVITY ===
 	if not is_on_floor():
-		var gravity_force = gravity
-		if velocity.y > 0:  # Falling
-			gravity_force *= gravity_fall_multiplier
-		
-		# Gravity uses BASE delta (not scaled) for consistent jump height
-		velocity.y += gravity_force * delta
+		velocity.y += effective_y_accel * delta
 		velocity.y = min(velocity.y, scaled_terminal_velocity)
 	
 	# === JUMPING ===
-	# Set velocity directly (UNSCALED for consistent height across time states)
 	if jump_pressed and is_on_floor():
-		velocity.y = -jump_velocity
-		print("Jump! velocity.y = ", velocity.y)
+		# correct jump velocity for time scale by using motion equation
+		# v = sqrt(2 * a * h)
+		var scaled_jump_height = jump_height / slowness_factor
+		velocity.y = -scaled_jump_height
+		
 	
 	# === MOVE ===
 	move_and_slide()
