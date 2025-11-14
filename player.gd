@@ -147,26 +147,28 @@ func _physics_process(delta):
 	
 	# Momentum gathering - acceleration scales with time_scale, but max speed does not
 	# On ground: clamp to max speed (don't retain momentum above cap)
-	# In air: retain momentum (don't clamp)
+	# In air: only accelerate if below max speed, but don't clamp if above (retain momentum)
 	if direction != 0.0:
 		if direction > 0:  # Moving right
 			if directional_snap:
 				velocity.x = current_max_speed
 			else:
-				# Scale acceleration by time_scale (but max speed stays constant)
-				velocity.x += acceleration * scaled_delta
-				# Clamp to max speed only if on ground
-				if is_on_floor():
+				# Only accelerate if below max speed (applies to both ground and air)
+				if velocity.x < current_max_speed:
+					# Scale acceleration by time_scale (but max speed stays constant)
+					velocity.x += acceleration * scaled_delta
 					velocity.x = min(velocity.x, current_max_speed)
+				# If already at/above max speed, momentum is retained (especially in air)
 		else:  # Moving left
 			if directional_snap:
 				velocity.x = -current_max_speed
 			else:
-				# Scale acceleration by time_scale (but max speed stays constant)
-				velocity.x -= acceleration * scaled_delta
-				# Clamp to max speed only if on ground
-				if is_on_floor():
+				# Only accelerate if above negative max speed (applies to both ground and air)
+				if velocity.x > -current_max_speed:
+					# Scale acceleration by time_scale (but max speed stays constant)
+					velocity.x -= acceleration * scaled_delta
 					velocity.x = max(velocity.x, -current_max_speed)
+				# If already at/above max speed, momentum is retained (especially in air)
 	else:
 		# No input - retain momentum in air, decelerate on ground
 		if is_on_floor():
@@ -183,15 +185,20 @@ func _physics_process(delta):
 		# In air: momentum is retained (no deceleration, no clamping) - this is the key mechanic!
 	
 	# --- Gravity (scales with time state) ---
-	if velocity.y > 0:
-		applied_gravity = gravity_scale * descending_gravity_factor
-	else:
-		applied_gravity = gravity_scale
+	# For consistent distance: time must scale by 1/time_scale
+	# Time = 2*v/g, so if v scales by time_scale, g must scale by time_scale²
+	# This makes: time = 2*(v*ts)/(g*ts²) = (2*v/g) * (1/ts) ✓
+	var gravity_time_scale = time_scale * time_scale  # time_scale²
 	
-	# Apply gravity (scaled by time state)
+	if velocity.y > 0:
+		applied_gravity = gravity_scale * descending_gravity_factor * gravity_time_scale
+	else:
+		applied_gravity = gravity_scale * gravity_time_scale
+	
+	# Apply gravity (scaled by time state squared)
 	if not is_on_floor():
 		if velocity.y < applied_terminal_velocity:
-			velocity.y += applied_gravity * scaled_delta
+			velocity.y += applied_gravity * delta  # Use base delta, gravity already scaled
 		elif velocity.y > applied_terminal_velocity:
 			velocity.y = applied_terminal_velocity
 	else:
@@ -208,18 +215,20 @@ func _physics_process(delta):
 		jump_count = 0
 		
 		# Give initial velocity boost to get off the ground
-		# Scale by sqrt(time_scale) so jump height is consistent across time states
-		# This compensates for gravity scaling with time_scale
-		var initial_jump_velocity = sqrt(2.0 * gravity_scale * jump_height) * sqrt(time_scale)
+		# Scale by time_scale (not sqrt) so distance traveled is consistent
+		# This makes: distance = velocity * time = (v * ts) * (t / ts) = v * t (constant)
+		# Note: Jump height will vary (taller in slow mode, shorter in fast mode)
+		var base_jump_velocity = sqrt(2.0 * gravity_scale * jump_height)
+		var initial_jump_velocity = base_jump_velocity * time_scale
 		velocity.y = -initial_jump_velocity
 		print("Jump started! Initial velocity: ", -initial_jump_velocity, " (time_scale: ", time_scale, ")")
 	
 	# Apply jump acceleration while jump key is held
 	# Only apply while ascending (velocity.y < 0) to prevent jumping while falling
 	if is_jumping and jump_hold and velocity.y < 0:
-		# Apply jump acceleration (scales with time_scale)
-		# Net acceleration = jump_acceleration - gravity (both scale with time_scale)
-		velocity.y -= jump_acceleration * scaled_delta
+		# Apply jump acceleration (scales with time_scale² to match gravity scaling)
+		# Net acceleration = jump_acceleration - gravity (both scale with time_scale²)
+		velocity.y -= jump_acceleration * gravity_time_scale * delta
 	
 	# Stop jumping when jump key is released or we start falling
 	if jump_release or velocity.y >= 0:
