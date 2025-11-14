@@ -14,13 +14,13 @@ extends CharacterBody2D
 # --- Jumping and Gravity ---
 @export_category("Jumping and Gravity")
 ## The peak height of your player's jump
-@export_range(0, 20) var jump_height: float = 2.0
+@export_range(0, 20) var jump_height: float = 10.0
 ## The strength at which your character will be pulled to the ground (base gravity)
 @export_range(0, 100) var gravity_scale: float = 20.0
 ## The fastest your player can fall
 @export_range(0, 1000) var terminal_velocity: float = 500.0
 ## Your player will move this amount faster when falling
-@export_range(0.5, 3) var descending_gravity_factor: float = 1.3
+@export_range(0.5, 3) var descending_gravity_factor: float = 0.5
 ## Enabling this makes jump height variable based on how long you hold jump
 @export var variable_jump_height: bool = true
 ## How much the jump height is cut by when releasing early
@@ -49,6 +49,8 @@ var coyote_active: bool = false
 var jump_count: int = 1
 
 func _ready():
+	print("Player script loaded! jump_count initialized to: ", jump_count)
+	
 	# Get time manager from autoload
 	time_manager = get_node("/root/TimeStateManager")
 	
@@ -65,6 +67,8 @@ func _ready():
 	
 	# Calculate derived values
 	_update_movement_data()
+	
+	print("Jump magnitude calculated: ", jump_magnitude)
 
 func _update_movement_data():
 	# Calculate acceleration/deceleration based on time to reach speeds
@@ -120,8 +124,14 @@ func _physics_process(delta):
 	# --- Input Detection ---
 	var left_hold = Input.is_action_pressed("ui_left")
 	var right_hold = Input.is_action_pressed("ui_right")
-	var jump_tap = Input.is_action_just_pressed("ui_accept")
-	var jump_release = Input.is_action_just_released("ui_accept")
+	# Try multiple input actions for jump (ui_accept is space/enter, ui_up is up arrow)
+	# Also check for space key directly as fallback
+	var jump_tap = Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("ui_up") or Input.is_key_pressed(KEY_SPACE)
+	var jump_release = Input.is_action_just_released("ui_accept") or Input.is_action_just_released("ui_up")
+	
+	# Debug: Check if input is being detected
+	if jump_tap:
+		print("Jump input detected! jump_count: ", jump_count, " is_on_floor(): ", is_on_floor())
 	
 	# Debug controls for time state (J = slow, K = fast)
 	# Note: These are handled in TimeStateManager._input() now
@@ -184,29 +194,24 @@ func _physics_process(delta):
 		velocity.y = velocity.y / jump_variable
 	
 	# --- Jumping with Coyote Time and Buffering ---
-	if jump_count == 1:  # Single jump mode (with coyote time and buffering)
-		if not is_on_floor():
-			if coyote_time > 0:
-				coyote_active = true
-				_coyote_time_timer()
-		
-		if jump_tap:
-			if coyote_active:
-				coyote_active = false
-				_jump()
-			elif jump_buffering > 0:
-				jump_was_pressed = true
-				_buffer_jump_timer()
-			elif is_on_floor():
-				_jump()
-		
-		if is_on_floor():
-			if coyote_time > 0:
-				coyote_active = true
-			else:
-				coyote_active = false
-			if jump_was_pressed:
-				_jump()
+	# Debug: Always check jump_count
+	if jump_tap:
+		print("Jump pressed! jump_count: ", jump_count, " is_on_floor(): ", is_on_floor())
+	
+	# SIMPLIFIED JUMP FOR DEBUGGING - Remove coyote time and buffering complexity
+	if jump_tap and is_on_floor() and jump_count > 0:
+		print("Attempting jump! is_on_floor: ", is_on_floor(), " jump_count: ", jump_count)
+		_jump()
+	
+	# Reset jump count when on floor
+	if is_on_floor():
+		jump_count = 1
+		coyote_active = false
+		jump_was_pressed = false
+	else:
+		# If not on floor and we've used our jump, set count to 0
+		if jump_count == 0:
+			pass  # Already used jump
 	
 	# Move the player
 	move_and_slide()
@@ -222,6 +227,7 @@ func _decelerate(delta: float):
 			velocity.x += deceleration * delta
 
 func _jump():
+	print("JUMP! velocity.y set to: ", -jump_magnitude)
 	velocity.y = -jump_magnitude
 	jump_was_pressed = false
 	jump_count = 0
