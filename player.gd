@@ -195,24 +195,31 @@ func _physics_process(delta):
 		applied_terminal_velocity = terminal_velocity
 	
 	# --- Jumping (as acceleration) ---
-	# Jump is a continuous acceleration applied while jump key is held
-	# This acceleration scales with time_scale (like all accelerations)
+	# Jump has two parts:
+	# 1. Initial velocity boost (scaled by sqrt(time_scale) for consistent height)
+	# 2. Continuous acceleration while held (scales with time_scale)
 	
 	# Check if we can start a jump (must be on floor)
 	if jump_tap and is_on_floor() and jump_count > 0:
 		is_jumping = true
 		jump_count = 0
-		print("Jump started!")
+		
+		# Give initial velocity boost to get off the ground
+		# Scale by sqrt(time_scale) so jump height is consistent across time states
+		# This compensates for gravity scaling with time_scale
+		var initial_jump_velocity = sqrt(2.0 * gravity_scale * jump_height) * sqrt(time_scale)
+		velocity.y = -initial_jump_velocity
+		print("Jump started! Initial velocity: ", -initial_jump_velocity, " (time_scale: ", time_scale, ")")
 	
 	# Apply jump acceleration while jump key is held
-	# Only apply while ascending (velocity.y <= 0) to prevent jumping while falling
-	if is_jumping and jump_hold and velocity.y <= 0:
+	# Only apply while ascending (velocity.y < 0) to prevent jumping while falling
+	if is_jumping and jump_hold and velocity.y < 0:
 		# Apply jump acceleration (scales with time_scale)
 		# Net acceleration = jump_acceleration - gravity (both scale with time_scale)
 		velocity.y -= jump_acceleration * scaled_delta
 	
 	# Stop jumping when jump key is released or we start falling
-	if jump_release or velocity.y > 0:
+	if jump_release or velocity.y >= 0:
 		is_jumping = false
 	
 	# Reset jump count when on floor
