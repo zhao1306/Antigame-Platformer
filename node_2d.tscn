@@ -310,7 +310,6 @@ script = ExtResource("1_0e48y")
 position = Vector2(563, -32)
 
 [node name="Player" type="CharacterBody2D" parent="." groups=["player"]]
-collision_mask = 1
 script = ExtResource("1_wtcfe")
 
 [node name="Sprite2D" type="Sprite2D" parent="Player"]

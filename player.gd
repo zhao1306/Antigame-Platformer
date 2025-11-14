@@ -13,14 +13,14 @@ extends CharacterBody2D
 
 # --- Jumping and Gravity ---
 @export_category("Jumping and Gravity")
-## The peak height of your player's jump
-@export_range(0, 20) var jump_height: float = 10.0
-## The strength at which your character will be pulled to the ground (base gravity)
-@export_range(0, 100) var gravity_scale: float = 20.0
+## The peak height of your player's jump (in pixels)
+@export_range(0, 200) var jump_height: float = 200.0
+## The strength at which your character will be pulled to the ground (base gravity in pixels/sec²)
+@export_range(0, 2000) var gravity_scale: float = 600.0
 ## The fastest your player can fall
 @export_range(0, 1000) var terminal_velocity: float = 500.0
 ## Your player will move this amount faster when falling
-@export_range(0.5, 3) var descending_gravity_factor: float = 0.5
+@export_range(0.5, 3) var descending_gravity_factor: float = 1
 ## Enabling this makes jump height variable based on how long you hold jump
 @export var variable_jump_height: bool = true
 ## How much the jump height is cut by when releasing early
@@ -36,7 +36,7 @@ var base_gravity: float
 var current_max_speed: float
 var acceleration: float
 var deceleration: float
-var jump_magnitude: float
+var jump_acceleration: float  # Jump force applied while jump key is held
 var applied_gravity: float
 var applied_terminal_velocity: float
 
@@ -47,6 +47,7 @@ var previous_time_scale: float = 1.0
 var jump_was_pressed: bool = false
 var coyote_active: bool = false
 var jump_count: int = 1
+var is_jumping: bool = false  # True while jump key is held and we're ascending
 
 func _ready():
 	print("Player script loaded! jump_count initialized to: ", jump_count)
@@ -68,7 +69,7 @@ func _ready():
 	# Calculate derived values
 	_update_movement_data()
 	
-	print("Jump magnitude calculated: ", jump_magnitude)
+	print("Jump acceleration calculated: ", jump_acceleration)
 
 func _update_movement_data():
 	# Calculate acceleration/deceleration based on time to reach speeds
@@ -82,8 +83,12 @@ func _update_movement_data():
 	else:
 		deceleration = max_speed * 1000  # Very fast if 0
 	
-	# Calculate jump magnitude
-	jump_magnitude = (10.0 * jump_height) * gravity_scale
+	# Calculate jump acceleration based on desired jump height
+	# Jump acceleration should overcome gravity to reach jump_height
+	# Using: h = (v²)/(2g), and v = a*t, where a is net acceleration (jump_accel - gravity)
+	# For simplicity, set jump acceleration to be strong enough to reach jump_height
+	# A good rule: jump_acceleration should be significantly higher than gravity
+	jump_acceleration = gravity_scale * 2.5  # Adjust multiplier to control jump feel
 	
 	# Update current max speed based on time scale
 	_update_max_speed()
@@ -125,8 +130,8 @@ func _physics_process(delta):
 	var left_hold = Input.is_action_pressed("ui_left")
 	var right_hold = Input.is_action_pressed("ui_right")
 	# Try multiple input actions for jump (ui_accept is space/enter, ui_up is up arrow)
-	# Also check for space key directly as fallback
-	var jump_tap = Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("ui_up") or Input.is_key_pressed(KEY_SPACE)
+	var jump_tap = Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("ui_up")
+	var jump_hold = Input.is_action_pressed("ui_accept") or Input.is_action_pressed("ui_up")
 	var jump_release = Input.is_action_just_released("ui_accept") or Input.is_action_just_released("ui_up")
 	
 	# Debug: Check if input is being detected
@@ -144,15 +149,15 @@ func _physics_process(delta):
 		direction = -1.0
 	
 	# Momentum gathering - only accelerate if below max speed
-	# Acceleration uses base delta (consistent feel), but cap scales with time state
+	# Both acceleration and max speed scale with time state for consistent feel
 	if direction != 0.0:
 		if direction > 0:  # Moving right
 			if velocity.x < current_max_speed or directional_snap:
 				if directional_snap:
 					velocity.x = current_max_speed
 				else:
-					# Acceleration uses base delta for consistent feel
-					velocity.x += acceleration * delta
+					# Scale acceleration by time_scale to match scaled max speed
+					velocity.x += acceleration * scaled_delta
 					velocity.x = min(velocity.x, current_max_speed)
 			# If already at or above max speed, momentum is retained
 		else:  # Moving left
@@ -160,16 +165,16 @@ func _physics_process(delta):
 				if directional_snap:
 					velocity.x = -current_max_speed
 				else:
-					# Acceleration uses base delta for consistent feel
-					velocity.x -= acceleration * delta
+					# Scale acceleration by time_scale to match scaled max speed
+					velocity.x -= acceleration * scaled_delta
 					velocity.x = max(velocity.x, -current_max_speed)
 			# If already at or above max speed, momentum is retained
 	else:
 		# No input - retain momentum in air, decelerate on ground
 		if is_on_floor():
-			# Decelerate on ground (uses base delta for consistent feel)
+			# Decelerate on ground (scale by time_scale for consistency)
 			if not directional_snap:
-				_decelerate(delta)
+				_decelerate(scaled_delta)
 			else:
 				velocity.x = 0
 		# In air: momentum is retained (no deceleration) - this is the key mechanic!
@@ -189,29 +194,33 @@ func _physics_process(delta):
 	else:
 		applied_terminal_velocity = terminal_velocity
 	
-	# Variable jump height
-	if variable_jump_height and jump_release and velocity.y < 0:
-		velocity.y = velocity.y / jump_variable
+	# --- Jumping (as acceleration) ---
+	# Jump is a continuous acceleration applied while jump key is held
+	# This acceleration scales with time_scale (like all accelerations)
 	
-	# --- Jumping with Coyote Time and Buffering ---
-	# Debug: Always check jump_count
-	if jump_tap:
-		print("Jump pressed! jump_count: ", jump_count, " is_on_floor(): ", is_on_floor())
-	
-	# SIMPLIFIED JUMP FOR DEBUGGING - Remove coyote time and buffering complexity
+	# Check if we can start a jump (must be on floor)
 	if jump_tap and is_on_floor() and jump_count > 0:
-		print("Attempting jump! is_on_floor: ", is_on_floor(), " jump_count: ", jump_count)
-		_jump()
+		is_jumping = true
+		jump_count = 0
+		print("Jump started!")
+	
+	# Apply jump acceleration while jump key is held
+	# Only apply while ascending (velocity.y <= 0) to prevent jumping while falling
+	if is_jumping and jump_hold and velocity.y <= 0:
+		# Apply jump acceleration (scales with time_scale)
+		# Net acceleration = jump_acceleration - gravity (both scale with time_scale)
+		velocity.y -= jump_acceleration * scaled_delta
+	
+	# Stop jumping when jump key is released or we start falling
+	if jump_release or velocity.y > 0:
+		is_jumping = false
 	
 	# Reset jump count when on floor
 	if is_on_floor():
 		jump_count = 1
+		is_jumping = false
 		coyote_active = false
 		jump_was_pressed = false
-	else:
-		# If not on floor and we've used our jump, set count to 0
-		if jump_count == 0:
-			pass  # Already used jump
 	
 	# Move the player
 	move_and_slide()
@@ -226,11 +235,8 @@ func _decelerate(delta: float):
 		elif velocity.x < 0:
 			velocity.x += deceleration * delta
 
-func _jump():
-	print("JUMP! velocity.y set to: ", -jump_magnitude)
-	velocity.y = -jump_magnitude
-	jump_was_pressed = false
-	jump_count = 0
+# Jump is now handled as continuous acceleration in _physics_process
+# No need for _jump() function anymore
 
 func _coyote_time_timer():
 	await get_tree().create_timer(coyote_time).timeout
