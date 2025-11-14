@@ -94,12 +94,9 @@ func _update_movement_data():
 	_update_max_speed()
 
 func _update_max_speed():
-	# Max speed scales with time state
-	if time_manager:
-		var time_scale = time_manager.get_time_scale()
-		current_max_speed = max_speed * time_scale
-	else:
-		current_max_speed = max_speed
+	# Max speed does NOT scale with time_scale - only acceleration scales
+	# This ensures consistent distance traveled across time states
+	current_max_speed = max_speed
 
 func _on_time_state_changed(_new_state: int):
 	# Conserve horizontal momentum when time state changes
@@ -148,36 +145,42 @@ func _physics_process(delta):
 	elif left_hold:
 		direction = -1.0
 	
-	# Momentum gathering - only accelerate if below max speed
-	# Both acceleration and max speed scale with time state for consistent feel
+	# Momentum gathering - acceleration scales with time_scale, but max speed does not
+	# On ground: clamp to max speed (don't retain momentum above cap)
+	# In air: retain momentum (don't clamp)
 	if direction != 0.0:
 		if direction > 0:  # Moving right
-			if velocity.x < current_max_speed or directional_snap:
-				if directional_snap:
-					velocity.x = current_max_speed
-				else:
-					# Scale acceleration by time_scale to match scaled max speed
-					velocity.x += acceleration * scaled_delta
+			if directional_snap:
+				velocity.x = current_max_speed
+			else:
+				# Scale acceleration by time_scale (but max speed stays constant)
+				velocity.x += acceleration * scaled_delta
+				# Clamp to max speed only if on ground
+				if is_on_floor():
 					velocity.x = min(velocity.x, current_max_speed)
-			# If already at or above max speed, momentum is retained
 		else:  # Moving left
-			if velocity.x > -current_max_speed or directional_snap:
-				if directional_snap:
-					velocity.x = -current_max_speed
-				else:
-					# Scale acceleration by time_scale to match scaled max speed
-					velocity.x -= acceleration * scaled_delta
+			if directional_snap:
+				velocity.x = -current_max_speed
+			else:
+				# Scale acceleration by time_scale (but max speed stays constant)
+				velocity.x -= acceleration * scaled_delta
+				# Clamp to max speed only if on ground
+				if is_on_floor():
 					velocity.x = max(velocity.x, -current_max_speed)
-			# If already at or above max speed, momentum is retained
 	else:
 		# No input - retain momentum in air, decelerate on ground
 		if is_on_floor():
-			# Decelerate on ground (scale by time_scale for consistency)
+			# On ground: clamp to max speed and decelerate
 			if not directional_snap:
 				_decelerate(scaled_delta)
+				# Clamp to max speed after deceleration
+				if velocity.x > current_max_speed:
+					velocity.x = current_max_speed
+				elif velocity.x < -current_max_speed:
+					velocity.x = -current_max_speed
 			else:
 				velocity.x = 0
-		# In air: momentum is retained (no deceleration) - this is the key mechanic!
+		# In air: momentum is retained (no deceleration, no clamping) - this is the key mechanic!
 	
 	# --- Gravity (scales with time state) ---
 	if velocity.y > 0:
@@ -228,6 +231,13 @@ func _physics_process(delta):
 		is_jumping = false
 		coyote_active = false
 		jump_was_pressed = false
+		
+		# On ground: instantly clamp velocity to max speed cap
+		# This ensures momentum above cap is lost when landing
+		if velocity.x > current_max_speed:
+			velocity.x = current_max_speed
+		elif velocity.x < -current_max_speed:
+			velocity.x = -current_max_speed
 	
 	# Move the player
 	move_and_slide()
