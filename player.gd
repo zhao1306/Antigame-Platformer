@@ -7,7 +7,7 @@ extends CharacterBody2D
 @export_range(100, 5000) var x_friction: float = 4000.0      # Base friction (px/s²)
 
 @export_category("Jumping and Gravity")
-@export_range(100, 5000) var jump_height: float = 500.0        # Desired jump apex height (px)
+@export_range(100, 5000) var jump_height: float = 350.0        # Desired jump apex height (px)
 @export_range(100, 3000) var y_acceleration: float = 800.0    # Base vertical acceleration (px/s²)
 @export_range(100, 2000) var terminal_velocity: float = 600.0
 

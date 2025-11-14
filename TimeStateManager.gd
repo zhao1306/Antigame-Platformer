@@ -15,8 +15,8 @@ var current_state: TimeState = TimeState.FAST
 var time_scale: float = 1.0  # Current time scale multiplier
 
 # Time scale values for each state
-const SLOW_SCALE: float = 0.5   # Half speed
-const FAST_SCALE: float = 2.0   # Double speed
+const SLOW_SCALE: float = 0.75   # 3/4 speed
+const FAST_SCALE: float = 1.25   # 5/4 speed
 const POWERUP_SCALE: float = 1.0  # Normal speed
 
 func _ready():

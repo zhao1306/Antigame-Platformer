@@ -311,13 +311,6 @@ position = Vector2(563, -32)
 
 [node name="Player" type="CharacterBody2D" parent="." groups=["player"]]
 script = ExtResource("1_wtcfe")
-max_speed = null
-x_acceleration = null
-x_friction = null
-jump_height = null
-gravity = null
-terminal_velocity = null
-gravity_fall_multiplier = null
 
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
 position = Vector2(-5.9604616e-08, -1.4305115e-06)
