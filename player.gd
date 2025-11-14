@@ -22,17 +22,17 @@ func _ready():
 func _physics_process(delta):
 	# Get time scale
 	var time_scale = time_manager.get_time_scale() if time_manager else 1.0
-	var accel_scale = pow(time_scale, 2)  # Maintain distance when time stretches
-	var slowness_factor = 1.0
-	if time_scale != 0.0:
-		slowness_factor = 1.0 / time_scale
-	
+	var accel_scale = pow(time_scale, 2)  # Maintain distance when time stretches	
 	# Scaled values
 	var scaled_max_speed = max_speed * time_scale
 	var scaled_terminal_velocity = terminal_velocity * time_scale
 	var effective_x_accel = x_acceleration * accel_scale
 	var effective_x_friction = x_friction * accel_scale
-	var effective_y_accel = y_acceleration / (slowness_factor * slowness_factor)
+	var effective_y_accel = y_acceleration * accel_scale
+	
+	# Clamp velocity to new max speed when time scale changes
+	if is_on_floor():
+		velocity.x = clamp(velocity.x, -scaled_max_speed, scaled_max_speed)
 	
 	# === INPUT ===
 	var move_input = Input.get_axis("ui_left", "ui_right")
@@ -47,8 +47,6 @@ func _physics_process(delta):
 		
 		if can_accelerate:
 			velocity.x += move_input * effective_x_accel * delta
-			if is_on_floor():
-				velocity.x = clamp(velocity.x, -scaled_max_speed, scaled_max_speed)
 	else:
 		if is_on_floor():
 			var friction_force = effective_x_friction * delta
@@ -64,9 +62,7 @@ func _physics_process(delta):
 	
 	# === JUMPING ===
 	if jump_pressed and is_on_floor():
-		# correct jump velocity for time scale by using motion equation
-		# v = sqrt(2 * a * h)
-		var scaled_jump_height = jump_height / slowness_factor
+		var scaled_jump_height = jump_height * time_scale
 		velocity.y = -scaled_jump_height
 		
 	
