@@ -1,10 +1,16 @@
-[gd_scene load_steps=13 format=4 uid="uid://wgbf1aaqpkev"]
+[gd_scene load_steps=26 format=4 uid="uid://wgbf1aaqpkev"]
 
 [ext_resource type="Script" uid="uid://bshtk55v4lnpt" path="res://scripts/MainScene.gd" id="1_0e48y"]
 [ext_resource type="Script" uid="uid://d3akxcp6d5n4a" path="res://scripts/entities/player.gd" id="1_wtcfe"]
 [ext_resource type="Texture2D" uid="uid://bchv41i5md0ko" path="res://Assets (Little Runmo)/6_Backgrounds/Level_One_1.png" id="2_q6r6c"]
 [ext_resource type="PackedScene" uid="uid://cmcuucbqyuct1" path="res://scenes/ui/UI.tscn" id="2_ui"]
 [ext_resource type="Texture2D" uid="uid://bmo7n55npf4oo" path="res://Assets (Little Runmo)/2_Tileset/Surface/Grass_Block.png" id="3_epypp"]
+[ext_resource type="PackedScene" uid="uid://cxx5qkmpkrvkv" path="res://scenes/pickups/Pickup.tscn" id="6_hmsq2"]
+[ext_resource type="Script" uid="uid://clni6pvrr070n" path="res://scripts/pickups/CoinData.gd" id="7_11oak"]
+[ext_resource type="PackedScene" path="res://scenes/pickups/QuestionBlock.tscn" id="7_n6tn7"]
+[ext_resource type="Script" uid="uid://d4a7i7hfm2ayj" path="res://scripts/pickups/DrugPowerupData.gd" id="8_11oak"]
+[ext_resource type="Texture2D" path="res://Assets (Little Runmo)/4_Items/Coin.png" id="9_coin"]
+[ext_resource type="Texture2D" path="res://Assets (Little Runmo)/4_Items/1_Up.png" id="10_powerup"]
 
 [sub_resource type="Environment" id="Environment_1"]
 
@@ -307,6 +313,41 @@ texture = ExtResource("3_epypp")
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_0hol4")
 
+[sub_resource type="Resource" id="Resource_vny8j"]
+script = ExtResource("7_11oak")
+metadata/_custom_type_script = "uid://clni6pvrr070n"
+texture = ExtResource("9_coin")
+
+[sub_resource type="Resource" id="Resource_el5g4"]
+script = ExtResource("7_11oak")
+metadata/_custom_type_script = "uid://clni6pvrr070n"
+texture = ExtResource("9_coin")
+
+[sub_resource type="Resource" id="Resource_kywn2"]
+script = ExtResource("7_11oak")
+metadata/_custom_type_script = "uid://clni6pvrr070n"
+texture = ExtResource("9_coin")
+
+[sub_resource type="Resource" id="Resource_h0xs0"]
+script = ExtResource("7_11oak")
+metadata/_custom_type_script = "uid://clni6pvrr070n"
+texture = ExtResource("9_coin")
+
+[sub_resource type="Resource" id="Resource_vvebl"]
+script = ExtResource("7_11oak")
+metadata/_custom_type_script = "uid://clni6pvrr070n"
+texture = ExtResource("9_coin")
+
+[sub_resource type="Resource" id="Resource_m64vw"]
+script = ExtResource("8_11oak")
+metadata/_custom_type_script = "uid://d4a7i7hfm2ayj"
+texture = ExtResource("10_powerup")
+
+[sub_resource type="Resource" id="Resource_n6tn7"]
+script = ExtResource("8_11oak")
+metadata/_custom_type_script = "uid://d4a7i7hfm2ayj"
+texture = ExtResource("10_powerup")
+
 [node name="MainScene (Node2D)" type="Node2D"]
 script = ExtResource("1_0e48y")
 
@@ -364,3 +405,55 @@ texture = SubResource("PlaceholderTexture2D_epypp")
 position = Vector2(3, 0)
 tile_map_data = PackedByteArray("AACX/wEAAAAMAAAAAACY/wEAAAANAAAAAACZ/wEAAAANAAAAAACa/wEAAAANAAAAAACb/wEAAAANAAAAAACc/wEAAAANAAAAAACd/wEAAAANAAAAAACe/wEAAAANAAAAAACf/wEAAAANAAAAAACg/wEAAAANAAAAAACh/wEAAAANAAAAAACi/wEAAAANAAAAAACj/wEAAAANAAAAAACk/wEAAAANAAAAAACl/wEAAAANAAAAAACm/wEAAAANAAAAAACn/wEAAAANAAAAAACo/wEAAAANAAAAAACp/wEAAAANAAAAAACq/wEAAAANAAAAAACr/wEAAAANAAAAAACs/wEAAAANAAAAAACt/wEAAAANAAAAAAC+/wEAAAANAAAAAACu/wEAAAANAAAAAACv/wEAAAANAAAAAACw/wEAAAANAAAAAACx/wEAAAANAAAAAACy/wEAAAANAAAAAACz/wEAAAANAAAAAAC0/wEAAAANAAAAAAC1/wEAAAANAAAAAAC2/wEAAAANAAAAAAC3/wEAAAANAAAAAAC4/wEAAAANAAAAAAC5/wEAAAANAAAAAAC6/wEAAAANAAAAAAC7/wEAAAANAAAAAAC8/wEAAAANAAAAAAC9/wEAAAANAAAAAADZ/wEAAAANAAAAAADa/wEAAAANAAAAAAC//wEAAAANAAAAAADA/wEAAAANAAAAAADB/wEAAAANAAAAAADC/wEAAAANAAAAAADD/wEAAAANAAAAAADE/wEAAAANAAAAAADF/wEAAAANAAAAAADG/wEAAAANAAAAAADH/wEAAAANAAAAAADI/wEAAAANAAAAAADJ/wEAAAANAAAAAADK/wEAAAANAAAAAADL/wEAAAANAAAAAADM/wEAAAANAAAAAADN/wEAAAANAAAAAADO/wEAAAANAAAAAADP/wEAAAANAAAAAADQ/wEAAAANAAAAAADR/wEAAAANAAAAAADS/wEAAAANAAAAAADT/wEAAAANAAAAAADU/wEAAAANAAAAAADV/wEAAAANAAAAAADW/wEAAAANAAAAAADX/wEAAAANAAAAAADY/wEAAAANAAAAAADb/wEAAAANAAAAAADj/wEAAAANAAAAAADk/wEAAAANAAAAAADl/wEAAAANAAAAAADm/wEAAAANAAAAAADn/wEAAAANAAAAAADo/wEAAAANAAAAAADp/wEAAAANAAAAAADq/wEAAAANAAAAAADr/wEAAAANAAAAAADs/wEAAAANAAAAAADt/wEAAAANAAAAAADu/wEAAAANAAAAAADv/wEAAAANAAAAAADw/wEAAAANAAAAAADx/wEAAAANAAAAAADy/wEAAAANAAAAAADz/wEAAAANAAAAAAD0/wEAAAANAAAAAAD1/wEAAAANAAAAAAD2/wEAAAANAAAAAAD3/wEAAAANAAAAAAD4/wEAAAANAAAAAAD5/wEAAAANAAAAAAD6/wEAAAANAAAAAAD7/wEAAAANAAAAAAD8/wEAAAANAAAAAAD9/wEAAAANAAAAAAD+/wEAAAANAAAAAAD//wEAAAANAAAAAAAAAAEAAAANAAAAAAABAAEAAAANAAAAAAACAAEAAAANAAAAAAADAAEAAAANAAAAAAAEAAEAAAANAAAAAAAFAAEAAAANAAAAAAAGAAEAAAANAAAAAAAHAAEAAAANAAAAAAAIAAEAAAANAAAAAAAJAAEAAAANAAAAAAAKAAEAAAANAAAAAAALAAEAAAANAAAAAAAMAAEAAAANAAAAAAANAAEAAAANAAAAAAAOAAEAAAANAAAAAAAPAAEAAAANAAAAAAAQAAEAAAANAAAAAAARAAEAAAANAAAAAAASAAEAAAANAAAAAAATAAEAAAANAAAAAAAUAAEAAAANAAAAAAAVAAEAAAANAAAAAAAWAAEAAAANAAAAAAAXAAEAAAANAAAAAAAYAAEAAAANAAAAAAAZAAEAAAANAAAAAAAaAAEAAAANAAAAAAAbAAEAAAANAAAAAAAcAAEAAAANAAAAAAAdAAEAAAANAAAAAAAeAAEAAAANAAAAAAAfAAEAAAANAAAAAAAgAAEAAAANAAAAAAAhAAEAAAANAAAAAAAiAAEAAAANAAAAAAAjAAEAAAANAAAAAAAkAAEAAAANAAAAAAAlAAEAAAANAAAAAAAmAAEAAAANAAAAAAAnAAEAAAANAAAAAAAoAAEAAAANAAAAAAApAAEAAAANAAAAAAAqAAEAAAANAAAAAAArAAEAAAANAAAAAAAsAAEAAAANAAAAAAAtAAEAAAANAAAAAAAuAAEAAAANAAAAAAAvAAEAAAANAAAAAAAwAAEAAAANAAAAAAAxAAEAAAANAAAAAAAyAAEAAAANAAAAAAAzAAEAAAANAAAAAAA0AAEAAAANAAAAAAA1AAEAAAANAAAAAAA2AAEAAAANAAAAAAA3AAEAAAANAAAAAAA4AAEAAAANAAAAAAA5AAEAAAANAAAAAAA6AAEAAAANAAAAAAA7AAEAAAANAAAAAAA8AAEAAAANAAAAAAA9AAEAAAANAAAAAAA+AAEAAAANAAAAAAA/AAEAAAANAAAAAABAAAEAAAANAAAAAABBAAEAAAANAAAAAABCAAEAAAANAAAAAABDAAEAAAANAAAAAABEAAEAAAANAAAAAABFAAEAAAANAAAAAABGAAEAAAANAAAAAABHAAEAAAANAAAAAABIAAEAAAANAAAAAABJAAEAAAANAAAAAABKAAEAAAANAAAAAABLAAEAAAANAAAAAABMAAEAAAANAAAAAABNAAEAAAANAAAAAABOAAEAAAANAAAAAABPAAEAAAANAAAAAABQAAEAAAANAAAAAABRAAEAAAANAAAAAABSAAEAAAANAAAAAABTAAEAAAANAAAAAABUAAEAAAANAAAAAABVAAEAAAANAAAAAABWAAEAAAANAAAAAABXAAEAAAANAAAAAABYAAEAAAANAAAAAABZAAEAAAANAAAAAABaAAEAAAANAAAAAABbAAEAAAANAAAAAABcAAEAAAANAAAAAABdAAEAAAANAAAAAABeAAEAAAANAAAAAABfAAEAAAANAAAAAABgAAEAAAANAAAAAABhAAEAAAANAAAAAABiAAEAAAANAAAAAABjAAEAAAANAAAAAABkAAEAAAANAAAAAABlAAEAAAANAAAAAABmAAEAAAANAAAAAABnAAEAAAANAAAAAABoAAEAAAANAAAAAABpAAEAAAANAAAAAABqAAEAAAANAAAAAABrAAEAAAANAAAAAABsAAEAAAANAAAAAABtAAEAAAANAAAAAABuAAEAAAANAAAAAABvAAEAAAANAAAAAABwAAEAAAANAAAAAABxAAEAAAANAAAAAAByAAEAAAANAAAAAABzAAEAAAANAAAAAAB0AAEAAAANAAAAAAB1AAEAAAANAAAAAAB2AAEAAAANAAAAAAB3AAEAAAANAAAAAAB4AAEAAAANAAAAAAB5AAEAAAANAAAAAAB6AAEAAAANAAAAAAB7AAEAAAATAAAAAACBAAEAAAATAAAAAACCAAEAAAATAAAAAACDAAEAAAATAAAAAACEAAEAAAATAAAAAACFAAEAAAATAAAAAACGAAEAAAATAAAAAACHAAEAAAATAAAAAACIAAEAAAATAAAAAACJAAEAAAATAAAAAABfAPr/AAATAAAAAABgAPr/AAATAAAAAABhAPr/AAATAAAAAABpAPz/AAASAAAAAABqAPz/AAASAAAAAABrAPz/AAASAAAAAAByAP7/AAASAAAAAABzAP7/AAASAAAAAAB0AP7/AAASAAAAAAByAPT/AAASAAAAAABzAPT/AAASAAAAAAB0APT/AAASAAAAAABzAPj/AAASAAAAAAB0APj/AAASAAAAAAB1APj/AAASAAAAAAA=")
 tile_set = SubResource("TileSet_q6r6c")
+
+[node name="Pickup" parent="." instance=ExtResource("6_hmsq2")]
+position = Vector2(1700, -78)
+data = SubResource("Resource_vny8j")
+
+[node name="Pickup" parent="Pickup" instance=ExtResource("6_hmsq2")]
+position = Vector2(1700, -78)
+data = SubResource("Resource_vny8j")
+
+[node name="Pickup2" parent="Pickup" instance=ExtResource("6_hmsq2")]
+position = Vector2(1700, -78)
+data = SubResource("Resource_vny8j")
+
+[node name="Pickup" parent="Pickup/Pickup2" instance=ExtResource("6_hmsq2")]
+position = Vector2(1700, -78)
+data = SubResource("Resource_vny8j")
+
+[node name="Pickup2" parent="." instance=ExtResource("6_hmsq2")]
+position = Vector2(1720, -78)
+data = SubResource("Resource_el5g4")
+
+[node name="Pickup3" parent="." instance=ExtResource("6_hmsq2")]
+position = Vector2(1563, -105)
+data = SubResource("Resource_vny8j")
+
+[node name="Pickup4" parent="." instance=ExtResource("6_hmsq2")]
+position = Vector2(1546, -105)
+data = SubResource("Resource_vny8j")
+
+[node name="Pickup5" parent="." instance=ExtResource("6_hmsq2")]
+position = Vector2(1530, -105)
+data = SubResource("Resource_vny8j")
+
+[node name="Pickup6" parent="." instance=ExtResource("6_hmsq2")]
+position = Vector2(1850, -200)
+data = SubResource("Resource_kywn2")
+
+[node name="Pickup7" parent="." instance=ExtResource("6_hmsq2")]
+position = Vector2(1832, -201)
+data = SubResource("Resource_h0xs0")
+
+[node name="Pickup8" parent="." instance=ExtResource("6_hmsq2")]
+position = Vector2(1867, -199)
+data = SubResource("Resource_vvebl")
+
+[node name="QuestionBlock" parent="." instance=ExtResource("7_n6tn7")]
+position = Vector2(1851, -276)
+powerup_data = SubResource("Resource_m64vw")
+
+[node name="Pickup9" parent="." instance=ExtResource("6_hmsq2")]
+position = Vector2(-254, -36)
+data = SubResource("Resource_n6tn7")
