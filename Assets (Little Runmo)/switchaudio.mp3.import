@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dwrtdlbqsjttc"
+path="res://.godot/imported/switchaudio.mp3-8e00e3538cc249f25fcba74fa9f83aec.mp3str"
+
+[deps]
+
+source_file="res://Assets (Little Runmo)/switchaudio.mp3"
+dest_files=["res://.godot/imported/switchaudio.mp3-8e00e3538cc249f25fcba74fa9f83aec.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

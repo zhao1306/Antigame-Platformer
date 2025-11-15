@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=4 uid="uid://cmcuucbqyuct1"]
+[gd_scene load_steps=5 format=3 uid="uid://cmcuucbqyuct1"]
 
-[ext_resource type="AudioStream" uid="uid://cu5qwixp323xf" path="res://Assets (Little Runmo)/8_Music_Sound Effects/Confetti_Plop.wav" id="2_3b2b5"]
-[ext_resource type="Shader" path="res://shaders/satuation_etc.gdshader" id="3_shader"]
+[ext_resource type="AudioStream" uid="uid://cjf1cb3jma5np" path="res://Assets (Little Runmo)/beep.mp3" id="2_nnfdp"]
+[ext_resource type="AudioStream" uid="uid://dwrtdlbqsjttc" path="res://Assets (Little Runmo)/switchaudio.mp3" id="3_s64wo"]
+[ext_resource type="Shader" uid="uid://c1d3njg417xq" path="res://shaders/satuation_etc.gdshader" id="3_shader"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1"]
 shader = ExtResource("3_shader")
@@ -13,18 +14,16 @@ shader_parameter/saturation = 1.0
 layer = 2
 
 [node name="ScreenEffect" type="ColorRect" parent="."]
-layout_mode = 3
+material = SubResource("ShaderMaterial_1")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(1, 1, 1, 1)
-material = SubResource("ShaderMaterial_1")
 mouse_filter = 2
 
 [node name="FlashSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("2_3b2b5")
+stream = ExtResource("2_nnfdp")
 
 [node name="CoinCounter" type="Label" parent="."]
 anchors_preset = 3
@@ -40,3 +39,6 @@ grow_horizontal = 0
 grow_vertical = 0
 text = "Coins: 0"
 horizontal_alignment = 2
+
+[node name="SwitchSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_s64wo")
