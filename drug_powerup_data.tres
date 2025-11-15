@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="DrugPowerupData" load_steps=3 format=4]
+
+[ext_resource type="Script" path="res://DrugPowerupData.gd" id="1_powerup"]
+[ext_resource type="Texture2D" path="res://Assets (Little Runmo)/4_Items/1_Up.png" id="2_powerup_texture"]
+
+[resource]
+script = ExtResource("1_powerup")
+texture = ExtResource("2_powerup_texture")
+

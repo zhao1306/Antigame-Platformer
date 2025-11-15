@@ -31,9 +31,12 @@ func _ready():
 	# Wait one frame to ensure everything is initialized
 	await get_tree().process_frame
 	update_camera_limits()
+	
+	# Uncomment the line below to spawn test pickups automatically
+	spawn_test_pickups()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	# Update camera limits dynamically based on player position
 	update_camera_limits()
 
@@ -168,3 +171,36 @@ func _on_puzzle_room_trigger_body_exited(body: Node2D):
 	if body.is_in_group("player"):
 		current_puzzle_room = null
 		# Camera limits will update automatically in _process
+
+# --- Helper function to spawn test pickups ---
+func spawn_test_pickups():
+	var pickup_scene = load("res://Pickup.tscn")
+	var coin_data = load("res://coin_data.tres")
+	var powerup_data = load("res://drug_powerup_data.tres")
+	
+	if not pickup_scene or not coin_data or not powerup_data:
+		print("ERROR: Could not load pickup scene or data!")
+		return
+	
+	# Spawn a few coins near the player's starting position
+	var coin_positions = [
+		Vector2(100, 0),   # Right of spawn
+		Vector2(200, 0),   # Further right
+		Vector2(300, -50), # Up and right
+	]
+	
+	for i in range(coin_positions.size()):
+		var coin = pickup_scene.instantiate()
+		coin.name = "Coin_" + str(i + 1)
+		coin.data = coin_data
+		coin.position = coin_positions[i]
+		add_child(coin)
+		print("Spawned coin at: ", coin_positions[i])
+	
+	# Spawn a power-up
+	var powerup = pickup_scene.instantiate()
+	powerup.name = "PowerUp_1"
+	powerup.data = powerup_data
+	powerup.position = Vector2(400, -50)  # Further right and up
+	add_child(powerup)
+	print("Spawned power-up at: ", powerup.position)

@@ -18,3 +18,4 @@ config/icon="res://icon.svg"
 [autoload]
 
 TimeStateManager="*res://TimeStateManager.gd"
+VisualEffectsManager="*res://VisualEffectsManager.gd"
