@@ -8,7 +8,7 @@ func _run():
 	print("Adding collision to all tiles...")
 	
 	# Open the scene
-	var scene_path = "res://node_2d.tscn"
+	var scene_path = "res://scenes/main/node_2d.tscn"
 	var scene = load(scene_path) as PackedScene
 	
 	if not scene:

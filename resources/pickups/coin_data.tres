@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="CoinData" load_steps=3 format=4]
 
-[ext_resource type="Script" path="res://CoinData.gd" id="1_coin"]
+[ext_resource type="Script" path="res://scripts/pickups/CoinData.gd" id="1_coin"]
 [ext_resource type="Texture2D" path="res://Assets (Little Runmo)/4_Items/Coin.png" id="2_coin_texture"]
 
 [resource]

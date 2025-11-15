@@ -174,9 +174,9 @@ func _on_puzzle_room_trigger_body_exited(body: Node2D):
 
 # --- Helper function to spawn test pickups ---
 func spawn_test_pickups():
-	var pickup_scene = load("res://Pickup.tscn")
-	var coin_data = load("res://coin_data.tres")
-	var powerup_data = load("res://drug_powerup_data.tres")
+	var pickup_scene = load("res://scenes/pickups/Pickup.tscn")
+	var coin_data = load("res://resources/pickups/coin_data.tres")
+	var powerup_data = load("res://resources/pickups/drug_powerup_data.tres")
 	
 	if not pickup_scene or not coin_data or not powerup_data:
 		print("ERROR: Could not load pickup scene or data!")

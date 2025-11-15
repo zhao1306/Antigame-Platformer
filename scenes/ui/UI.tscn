@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://cr3oqe5rkush8"]
+[gd_scene load_steps=4 format=4 uid="uid://cmcuucbqyuct1"]
 
 [ext_resource type="AudioStream" uid="uid://cu5qwixp323xf" path="res://Assets (Little Runmo)/8_Music_Sound Effects/Confetti_Plop.wav" id="2_3b2b5"]
 [ext_resource type="Shader" path="res://shaders/satuation_etc.gdshader" id="3_shader"]
@@ -13,12 +13,14 @@ shader_parameter/saturation = 1.0
 layer = 2
 
 [node name="ScreenEffect" type="ColorRect" parent="."]
-material = SubResource("ShaderMaterial_1")
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+color = Color(1, 1, 1, 1)
+material = SubResource("ShaderMaterial_1")
 mouse_filter = 2
 
 [node name="FlashSound" type="AudioStreamPlayer" parent="."]

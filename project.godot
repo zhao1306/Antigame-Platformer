@@ -17,5 +17,5 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-TimeStateManager="*res://TimeStateManager.gd"
-UIManager="*res://UIManager.gd"
+TimeStateManager="*res://scripts/managers/TimeStateManager.gd"
+UIManager="*res://scripts/managers/UIManager.gd"
