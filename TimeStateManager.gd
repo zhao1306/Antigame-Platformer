@@ -62,4 +62,3 @@ func is_fast() -> bool:
 
 func is_powerup() -> bool:
 	return current_state == TimeState.POWERUP
-

@@ -1,9 +1,17 @@
-[gd_scene load_steps=13 format=4 uid="uid://wgbf1aaqpkev"]
+[gd_scene load_steps=15 format=4 uid="uid://wgbf1aaqpkev"]
 
 [ext_resource type="Script" uid="uid://bshtk55v4lnpt" path="res://MainScene.gd" id="1_0e48y"]
 [ext_resource type="Script" uid="uid://d3akxcp6d5n4a" path="res://player.gd" id="1_wtcfe"]
-[ext_resource type="PackedScene" path="res://UI.tscn" id="2_ui"]
+[ext_resource type="Shader" uid="uid://c1d3njg417xq" path="res://satuation_etc.gdshader" id="2_kdubu"]
+[ext_resource type="Texture2D" uid="uid://bchv41i5md0ko" path="res://Assets (Little Runmo)/6_Backgrounds/Level_One_1.png" id="2_q6r6c"]
+[ext_resource type="PackedScene" uid="uid://cmcuucbqyuct1" path="res://UI.tscn" id="2_ui"]
 [ext_resource type="Texture2D" uid="uid://bmo7n55npf4oo" path="res://Assets (Little Runmo)/2_Tileset/Surface/Grass_Block.png" id="3_epypp"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d21ai"]
+shader = ExtResource("2_kdubu")
+shader_parameter/brightness = -2.2352000028647012e-08
+shader_parameter/contrast = 0.9999997541279999
+shader_parameter/saturation = 0.9999997541279999
 
 [sub_resource type="Environment" id="Environment_1"]
 
@@ -309,14 +317,21 @@ sources/0 = SubResource("TileSetAtlasSource_0hol4")
 [node name="MainScene (Node2D)" type="Node2D"]
 script = ExtResource("1_0e48y")
 
+[node name="BackgroundLayer" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="Background" type="TextureRect" parent="BackgroundLayer"]
+material = SubResource("ShaderMaterial_d21ai")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_q6r6c")
+stretch_mode = 5
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." groups=["world_environment"]]
 environment = SubResource("Environment_1")
-
-[node name="VisualEffectsLayer" type="CanvasLayer" parent="."]
-layer = 0
-
-[node name="ColorFilter" type="CanvasModulate" parent="VisualEffectsLayer"]
-color = Color(1, 1, 1, 1)
 
 [node name="UI" parent="." instance=ExtResource("2_ui")]
 

@@ -10,4 +10,3 @@ extends Resource
 # Override this in subclasses to define pickup behavior
 func apply_effect(player_node: Node) -> void:
 	pass
-

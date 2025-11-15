@@ -1,107 +1,118 @@
-extends CanvasLayer
+extends Node
 
-# UI Manager - Handles visual effects and UI elements
+# UI Manager - Autoload singleton (parallel to TimeStateManager)
+# Handles UI elements (coin counter) and visual effects (saturation, flash via shader)
 
-@onready var flash_rect: ColorRect = $FlashRect
-@onready var flash_sound: AudioStreamPlayer = $FlashSound
-@onready var coin_counter: Label = $CoinCounter
+var ui_scene: CanvasLayer  # Reference to UI.tscn instance in main scene
+var screen_effect: ColorRect  # Full-screen shader overlay
+var shader_material: ShaderMaterial
+var flash_sound: AudioStreamPlayer
+var coin_counter: Label
+var time_manager: Node
 
-var color_filter: CanvasModulate
-
-@export var flash_opacity: float = 0.2
+@export var flash_brightness: float = 0.5  # Brightness value for flash effect
 @export var flash_duration: float = 0.1
 @export var time_between_flashes: float = 0.5
 
-var visual_effects_manager: Node
-var current_saturation: float = 1.0
-var current_pink_intensity: float = 0.0
-
 func _ready():
-	visual_effects_manager = get_node("/root/VisualEffectsManager")
-	add_to_group("ui_manager")
+	time_manager = get_node("/root/TimeStateManager")
 	
-	# Find ColorFilter in the VisualEffectsLayer (on layer 0, affects entire game)
-	var main_scene = get_tree().root.get_child(0)
+	# Wait for main scene to be ready
+	await get_tree().process_frame
+	
+	print("UIManager: Starting initialization...")
+	print("UIManager: Current scene: ", get_tree().current_scene)
+	print("UIManager: Root children count: ", get_tree().root.get_child_count())
+	
+	# Find UI scene instance in main scene
+	var main_scene = get_tree().current_scene
+	print("UIManager: Main scene: ", main_scene, " (name: ", main_scene.name if main_scene else "null", ")")
+	
 	if main_scene:
-		var visual_effects_layer = main_scene.get_node_or_null("VisualEffectsLayer")
-		if visual_effects_layer:
-			color_filter = visual_effects_layer.get_node_or_null("ColorFilter")
-			if color_filter:
-				color_filter.color = Color(1, 1, 1, 1)
-				print("UIManager: ColorFilter found and initialized")
+		ui_scene = main_scene.get_node_or_null("UI")
+		if ui_scene:
+			screen_effect = ui_scene.get_node_or_null("ScreenEffect")
+			flash_sound = ui_scene.get_node_or_null("FlashSound")
+			coin_counter = ui_scene.get_node_or_null("CoinCounter")
+			
+			# Get shader material from ScreenEffect
+			if screen_effect and screen_effect.material:
+				shader_material = screen_effect.material as ShaderMaterial
+				if shader_material:
+					print("UIManager: Shader material found and initialized")
+				else:
+					print("UIManager: ERROR - ScreenEffect material is not a ShaderMaterial!")
 			else:
-				print("UIManager: ERROR - ColorFilter node not found in VisualEffectsLayer")
+				print("UIManager: ERROR - ScreenEffect or material not found!")
+			
+			print("UIManager: UI scene found - ScreenEffect: ", screen_effect, ", FlashSound: ", flash_sound, ", CoinCounter: ", coin_counter)
 		else:
-			print("UIManager: ERROR - VisualEffectsLayer not found")
-	
-	# Initialize flash rect to invisible
-	if flash_rect:
-		flash_rect.modulate.a = 0.0
-		print("UIManager: FlashRect initialized")
+			print("UIManager: ERROR - UI scene not found in main scene!")
 	else:
-		print("UIManager: WARNING - FlashRect not found!")
+		print("UIManager: ERROR - Main scene not found!")
 	
-	# Check flash sound
-	if flash_sound:
-		if flash_sound.stream:
-			print("UIManager: FlashSound has stream: ", flash_sound.stream.resource_path)
-		else:
-			print("UIManager: WARNING - FlashSound has no stream assigned!")
-	else:
-		print("UIManager: WARNING - FlashSound not found!")
+	# Connect to time state changes for saturation effects
+	if time_manager:
+		time_manager.time_state_changed.connect(_on_time_state_changed)
+		# Set initial saturation
+		await get_tree().process_frame
+		update_saturation_for_state(time_manager.current_state)
 	
-	# Initialize coin counter
+	# Initialize UI elements
 	if coin_counter:
 		coin_counter.text = "Coins: 0"
-		print("UIManager: CoinCounter initialized")
-	else:
-		print("UIManager: WARNING - CoinCounter not found!")
+	
+	# Initialize shader to normal values
+	if shader_material:
+		shader_material.set_shader_parameter("brightness", 0.0)
+		shader_material.set_shader_parameter("contrast", 1.0)
+		shader_material.set_shader_parameter("saturation", 1.0)
 
 # Call this function to start the 3-beat countdown
 func play_timing_cues():
-	if not flash_rect or not flash_sound:
+	if not shader_material:
+		print("UIManager: ERROR - Shader material is null!")
+		return
+	if not flash_sound:
+		print("UIManager: ERROR - FlashSound is null!")
 		return
 	
-	var tween = create_tween()
+	print("UIManager: Starting timing cues - flash_brightness=", flash_brightness)
 	
-	# Flash 1
+	var tween = create_tween()
+	tween.set_parallel(false)  # Sequential, not parallel
+	
+	# Flash 1 - use brightness for flash effect
 	tween.tween_callback(flash_sound.play)
-	tween.tween_property(flash_rect, "modulate:a", flash_opacity, flash_duration / 2.0)
-	tween.tween_property(flash_rect, "modulate:a", 0.0, flash_duration / 2.0)
+	tween.tween_method(set_brightness, 0.0, flash_brightness, flash_duration / 2.0)
+	tween.tween_method(set_brightness, flash_brightness, 0.0, flash_duration / 2.0)
 	tween.tween_interval(time_between_flashes)
 	
 	# Flash 2
 	tween.tween_callback(flash_sound.play)
-	tween.tween_property(flash_rect, "modulate:a", flash_opacity, flash_duration / 2.0)
-	tween.tween_property(flash_rect, "modulate:a", 0.0, flash_duration / 2.0)
+	tween.tween_method(set_brightness, 0.0, flash_brightness, flash_duration / 2.0)
+	tween.tween_method(set_brightness, flash_brightness, 0.0, flash_duration / 2.0)
 	tween.tween_interval(time_between_flashes)
 	
 	# Flash 3
 	tween.tween_callback(flash_sound.play)
-	tween.tween_property(flash_rect, "modulate:a", flash_opacity, flash_duration / 2.0)
-	tween.tween_property(flash_rect, "modulate:a", 0.0, flash_duration / 2.0)
+	tween.tween_method(set_brightness, 0.0, flash_brightness, flash_duration / 2.0)
+	tween.tween_method(set_brightness, flash_brightness, 0.0, flash_duration / 2.0)
 
 # Flickers saturation during power-up transition
-# Returns a signal that can be awaited
 signal flicker_complete
 
 func play_powerup_flicker():
-	if not visual_effects_manager:
-		flicker_complete.emit()
-		return
-	
 	var tween = create_tween()
 	
 	# Flicker pattern: 1.0 → 0.0 → 1.5 → 0.0 → 1.5
-	tween.tween_method(visual_effects_manager.set_saturation, 1.0, 0.0, 0.2)
-	tween.tween_method(visual_effects_manager.set_saturation, 0.0, 1.5, 0.2)
-	tween.tween_method(visual_effects_manager.set_saturation, 1.5, 0.0, 0.2)
-	tween.tween_method(visual_effects_manager.set_saturation, 0.0, 1.5, 0.2)
+	tween.tween_method(set_saturation, 1.0, 0.0, 0.2)
+	tween.tween_method(set_saturation, 0.0, 1.5, 0.2)
+	tween.tween_method(set_saturation, 1.5, 0.0, 0.2)
+	tween.tween_method(set_saturation, 0.0, 1.5, 0.2)
 	tween.tween_interval(0.3)  # Hold final saturation briefly
 	
-	# Connect tween finished to signal
 	tween.finished.connect(flicker_complete.emit)
-	
 	await flicker_complete
 
 # Update coin counter display
@@ -109,46 +120,36 @@ func update_coin_counter(count: int):
 	if coin_counter:
 		coin_counter.text = "Coins: " + str(count)
 
-# Set color filter saturation (0.0 = greyscale, 1.0 = normal, >1.0 = high saturation)
-func set_color_filter_saturation(value: float):
-	current_saturation = value
-	_update_color_filter()
-
-# Set pink filter overlay (0.0 = no filter, 1.0 = full pink)
-func set_color_filter_pink(intensity: float):
-	current_pink_intensity = intensity
-	_update_color_filter()
-
-# Update the color filter combining saturation and pink effects
-func _update_color_filter():
-	if not color_filter:
+# Set saturation using shader (0.0 = greyscale, 1.0 = normal, >1.0 = high saturation)
+func set_saturation(value: float):
+	if not shader_material:
+		print("UIManager: ERROR - Cannot set saturation, shader material not found!")
 		return
-	
-	# Start with saturation effect
-	var final_color = Color(1, 1, 1, 1)
-	
-	if current_saturation <= 0.0:
-		# Greyscale: desaturate by averaging RGB
-		final_color = Color(0.5, 0.5, 0.5, 1)
-	elif current_saturation < 1.0:
-		# Partial saturation: interpolate between grey and normal
-		var grey = 0.5
-		final_color.r = lerp(grey, 1.0, current_saturation)
-		final_color.g = lerp(grey, 1.0, current_saturation)
-		final_color.b = lerp(grey, 1.0, current_saturation)
-	elif current_saturation > 1.0:
-		# High saturation: boost colors slightly
-		var boost = (current_saturation - 1.0) * 0.2
-		final_color.r = min(1.0, 1.0 + boost)
-		final_color.g = min(1.0, 1.0 + boost)
-		final_color.b = min(1.0, 1.0 + boost)
-	
-	# Add pink filter on top
-	if current_pink_intensity > 0.0:
-		# Blend pink tint with saturation
-		var pink_tint = Color(1.0, 0.6, 0.9, 1.0)
-		final_color.r = lerp(final_color.r, pink_tint.r, current_pink_intensity * 0.4)
-		final_color.g = lerp(final_color.g, pink_tint.g, current_pink_intensity * 0.4)
-		final_color.b = lerp(final_color.b, pink_tint.b, current_pink_intensity * 0.4)
-	
-	color_filter.color = final_color
+	shader_material.set_shader_parameter("saturation", value)
+
+# Set brightness using shader (for flash effects)
+func set_brightness(value: float):
+	if not shader_material:
+		print("UIManager: ERROR - Cannot set brightness, shader material not found!")
+		return
+	shader_material.set_shader_parameter("brightness", value)
+
+# Set contrast using shader
+func set_contrast(value: float):
+	if not shader_material:
+		print("UIManager: ERROR - Cannot set contrast, shader material not found!")
+		return
+	shader_material.set_shader_parameter("contrast", value)
+
+# Handle time state changes for saturation effects
+func update_saturation_for_state(state: int):
+	match state:
+		TimeStateManager.TimeState.SLOW:
+			set_saturation(0.0)  # Greyscale
+		TimeStateManager.TimeState.FAST:
+			set_saturation(1.0)  # Normal
+		TimeStateManager.TimeState.POWERUP:
+			set_saturation(1.5)  # High saturation
+
+func _on_time_state_changed(new_state: int):
+	update_saturation_for_state(new_state)

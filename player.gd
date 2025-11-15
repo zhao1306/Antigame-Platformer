@@ -13,17 +13,11 @@ extends CharacterBody2D
 # === INTERNAL VARIABLES ===
 var time_manager: Node
 var coin_count: int = 0
-var ui_manager: Node
+# UIManager is now an autoload singleton - access via get_node("/root/UIManager")
 
 func _ready():
 	time_manager = get_node("/root/TimeStateManager")
-	ui_manager = get_tree().get_first_node_in_group("ui_manager")
-	if not ui_manager:
-		# Try to find UI node
-		var main_scene = get_tree().root.get_child(0)
-		ui_manager = main_scene.get_node_or_null("UI")
-		if ui_manager:
-			ui_manager.add_to_group("ui_manager")
+	# UIManager is now an autoload singleton - no need to find it
 	
 	print("Player ready! jump_height=", jump_height, " y_accel=", y_acceleration)
 
@@ -80,7 +74,8 @@ func add_coin(amount: int):
 	coin_count += amount
 	print("Coin collected! Total: ", coin_count)
 	# Update UI counter
-	if ui_manager and ui_manager.has_method("update_coin_counter"):
+	var ui_manager = get_node("/root/UIManager")
+	if ui_manager:
 		ui_manager.update_coin_counter(coin_count)
 
 # Start power-up transition sequence
@@ -90,7 +85,8 @@ func start_powerup_transition():
 	set_physics_process(false)
 	
 	# Play flicker animation
-	if ui_manager and ui_manager.has_method("play_powerup_flicker"):
+	var ui_manager = get_node("/root/UIManager")
+	if ui_manager:
 		await ui_manager.play_powerup_flicker()
 	
 	# Set power-up state
