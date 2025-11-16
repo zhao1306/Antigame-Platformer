@@ -1,17 +1,27 @@
-[gd_scene load_steps=3 format=3 uid="uid://cxx5qkmpkrvkv"]
+[gd_scene load_steps=4 format=3 uid="uid://cxx5qkmpkrvkv"]
 
 [ext_resource type="Script" uid="uid://fefeuqpre8ro" path="res://scripts/pickups/Pickup.gd" id="1_pickup"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
 radius = 8.0
 
-[node name="Pickup" type="Area2D"]
-monitorable = false
+[sub_resource type="CircleShape2D" id="CircleShape2D_2"]
+radius = 8.0
+
+[node name="Pickup" type="CharacterBody2D"]
+collision_layer = 0
+collision_mask = 1
 script = ExtResource("1_pickup")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_1")
+
+[node name="CollectionArea" type="Area2D" parent="."]
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollectionArea"]
+shape = SubResource("CircleShape2D_2")
 
 [node name="CollectSound" type="AudioStreamPlayer" parent="."]

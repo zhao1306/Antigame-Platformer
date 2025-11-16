@@ -91,7 +91,7 @@ func spawn_powerup():
 	pickup.name = "PowerUp_block_" + str(block_count)
 	pickup.data = powerup_data
 	# Set position relative to scene root (MainScene pattern uses position, but we need global)
-	pickup.global_position = global_position + Vector2(0, -32)  # Spawn above block
+	pickup.global_position = global_position + Vector2(0, -16)  # Spawn above block
 	
 	# Enable movement if requested
 	if move_powerup:
