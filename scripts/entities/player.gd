@@ -6,13 +6,14 @@ extends CharacterBody2D
 @export_range(100, 5000) var x_acceleration: float = 1500.0  # Base horizontal acceleration (px/s²)
 
 @export_category("Jumping and Gravity")
-@export_range(100, 5000) var jump_height: float = 350.0        # Desired jump apex height (px)
+@export_range(100, 5000) var jump_height: float = 375.0        # Desired jump apex height (px)
 @export_range(100, 3000) var y_acceleration: float = 800.0    # Base vertical acceleration (px/s²)
-@export_range(100, 2000) var terminal_velocity: float = 600.0
 
 # === INTERNAL VARIABLES ===
 var time_manager: Node
 var coin_count: int = 0
+var powerup_timer: Timer = null  # Track active power-up timer
+var is_powerup_active: bool = false  # Track if power-up is currently active
 # UIManager is now an autoload singleton - access via get_node("/root/UIManager")
 
 func _ready():
@@ -25,10 +26,14 @@ func _physics_process(delta):
 	var accel_scale = pow(time_scale, 2)  # Maintain distance when time stretches	
 	# Scaled values
 	var scaled_max_speed = max_speed * time_scale
-	var scaled_terminal_velocity = terminal_velocity * time_scale
 	var effective_x_accel = x_acceleration * accel_scale
 	var effective_y_accel = y_acceleration * accel_scale
-	var effective_x_drag = 0.91
+	# Scale drag factors by time_scale to maintain same effect over real-world time
+	# drag^time_scale ensures same total drag effect regardless of time scale
+	var base_x_drag = 0.91
+	var base_y_drag = 0.98
+	var effective_x_drag = pow(base_x_drag, time_scale)
+	var effective_y_drag = pow(base_y_drag, time_scale)
 	
 	# Clamp velocity to new max speed when time scale changes
 	if is_on_floor():
@@ -56,7 +61,7 @@ func _physics_process(delta):
 	# === GRAVITY ===
 	if not is_on_floor():
 		velocity.y += effective_y_accel * delta
-		velocity.y = min(velocity.y, scaled_terminal_velocity)
+		velocity.y *= effective_y_drag
 	
 	# === JUMPING ===
 	if jump_pressed and is_on_floor():
@@ -78,12 +83,27 @@ func add_coin(amount: int):
 
 # Start power-up transition sequence
 func start_powerup_transition():
+	var ui_manager = get_node("/root/UIManager")
+	
+	# If power-up is already active, just extend the timer
+	if is_powerup_active:
+		print("Power-up already active, extending timer")
+		# Cancel existing timer
+		if powerup_timer:
+			powerup_timer.queue_free()
+			powerup_timer = null
+		# Start new 8-second timer
+		_start_powerup_timer()
+		return
+	
+	# First time entering power-up state
 	print("Power-up transition started")
+	is_powerup_active = true
+	
 	# Freeze player
 	set_physics_process(false)
 	
 	# Play flicker animation
-	var ui_manager = get_node("/root/UIManager")
 	if ui_manager:
 		await ui_manager.play_powerup_flicker()
 	
@@ -94,3 +114,37 @@ func start_powerup_transition():
 	# Unfreeze player
 	set_physics_process(true)
 	print("Power-up transition complete")
+	
+	# Start the 8-second timer
+	_start_powerup_timer()
+
+func _start_powerup_timer():
+	# Create and start 8-second timer
+	powerup_timer = Timer.new()
+	powerup_timer.wait_time = 8.0
+	powerup_timer.one_shot = true
+	powerup_timer.timeout.connect(_on_powerup_timer_expired)
+	add_child(powerup_timer)
+	powerup_timer.start()
+	print("Power-up timer started (8 seconds)")
+
+func _on_powerup_timer_expired():
+	print("Power-up duration complete, transitioning back")
+	is_powerup_active = false
+	powerup_timer = null
+	
+	# Freeze player during exit transition
+	set_physics_process(false)
+	
+	# Play exit flicker animation
+	var ui_manager = get_node("/root/UIManager")
+	if ui_manager:
+		await ui_manager.play_powerup_exit_flicker()
+	
+	# Return to FAST state
+	if time_manager:
+		time_manager.set_state(TimeStateManager.TimeState.FAST)
+	
+	# Unfreeze player
+	set_physics_process(true)
+	print("Power-up exit transition complete")

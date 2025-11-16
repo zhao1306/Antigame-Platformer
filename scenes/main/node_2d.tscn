@@ -409,46 +409,68 @@ tile_set = SubResource("TileSet_q6r6c")
 
 [node name="Pickup" parent="." instance=ExtResource("6_hmsq2")]
 position = Vector2(1700, -78)
+collision_layer = 1
+monitorable = false
 data = SubResource("Resource_vny8j")
 
 [node name="Pickup" parent="Pickup" instance=ExtResource("6_hmsq2")]
 position = Vector2(1700, -78)
+collision_layer = 1
+monitorable = false
 data = SubResource("Resource_vny8j")
 
 [node name="Pickup2" parent="Pickup" instance=ExtResource("6_hmsq2")]
 position = Vector2(1700, -78)
+collision_layer = 1
+monitorable = false
 data = SubResource("Resource_vny8j")
 
 [node name="Pickup" parent="Pickup/Pickup2" instance=ExtResource("6_hmsq2")]
 position = Vector2(1700, -78)
+collision_layer = 1
+monitorable = false
 data = SubResource("Resource_vny8j")
 
 [node name="Pickup2" parent="." instance=ExtResource("6_hmsq2")]
 position = Vector2(1720, -78)
+collision_layer = 1
+monitorable = false
 data = SubResource("Resource_el5g4")
 
 [node name="Pickup3" parent="." instance=ExtResource("6_hmsq2")]
 position = Vector2(1563, -105)
+collision_layer = 1
+monitorable = false
 data = SubResource("Resource_vny8j")
 
 [node name="Pickup4" parent="." instance=ExtResource("6_hmsq2")]
 position = Vector2(1546, -105)
+collision_layer = 1
+monitorable = false
 data = SubResource("Resource_vny8j")
 
 [node name="Pickup5" parent="." instance=ExtResource("6_hmsq2")]
 position = Vector2(1530, -105)
+collision_layer = 1
+monitorable = false
 data = SubResource("Resource_vny8j")
 
 [node name="Pickup6" parent="." instance=ExtResource("6_hmsq2")]
 position = Vector2(1850, -200)
+collision_layer = 1
+monitorable = false
 data = SubResource("Resource_kywn2")
 
 [node name="Pickup7" parent="." instance=ExtResource("6_hmsq2")]
 position = Vector2(1832, -201)
+collision_layer = 1
+monitorable = false
 data = SubResource("Resource_h0xs0")
 
 [node name="Pickup8" parent="." instance=ExtResource("6_hmsq2")]
 position = Vector2(1867, -199)
+collision_layer = 1
+monitorable = false
 data = SubResource("Resource_vvebl")
 
 [node name="QuestionBlock" parent="." instance=ExtResource("7_n6tn7")]
@@ -457,6 +479,8 @@ powerup_data = SubResource("Resource_m64vw")
 
 [node name="Pickup9" parent="." instance=ExtResource("6_hmsq2")]
 position = Vector2(-254, -36)
+collision_layer = 1
+monitorable = false
 data = SubResource("Resource_n6tn7")
 
 [node name="QuestionBlock2" parent="." instance=ExtResource("7_n6tn7")]

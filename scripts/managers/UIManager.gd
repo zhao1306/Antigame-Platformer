@@ -160,12 +160,22 @@ func play_powerup_flicker():
 	var tween = create_tween()
 	
 	# Flicker pattern: 1.0 → 0.0 → 1.5 → 0.0 → 1.5
-	tween.tween_method(set_saturation, 1.0, 0.0, 0.2)
-	tween.tween_method(set_saturation, 0.0, 1.5, 0.2)
-	tween.tween_method(set_saturation, 1.5, 0.0, 0.2)
-	tween.tween_method(set_saturation, 0.0, 1.5, 0.2)
-	tween.tween_interval(0.3)  # Hold final saturation briefly
+	tween.tween_method(set_saturation, 1.0, 0.0, 0.05)
+	tween.tween_method(set_saturation, 0.0, 1.5, 0.05)
+	tween.tween_method(set_saturation, 1.5, 0.0, 0.05)
+	tween.tween_method(set_saturation, 0.0, 1.5, 0.05)
+	tween.finished.connect(flicker_complete.emit)
+	await flicker_complete
+	set_saturation(3.0)  # Hyper-real super colorful saturated look
+
+func play_powerup_exit_flicker():
+	var tween = create_tween()
 	
+	# Exit flicker pattern: 3.0 → 1.5 → 0.0 → 1.5 → 1.0 (reverse transition)
+	tween.tween_method(set_saturation, 3.0, 1.5, 0.05)
+	tween.tween_method(set_saturation, 1.5, 0.0, 0.05)
+	tween.tween_method(set_saturation, 0.0, 1.5, 0.05)
+	tween.tween_method(set_saturation, 1.5, 1.0, 0.05)
 	tween.finished.connect(flicker_complete.emit)
 	await flicker_complete
 
@@ -203,7 +213,7 @@ func update_saturation_for_state(state: int):
 		TimeStateManager.TimeState.FAST:
 			set_saturation(1.0)  # Normal
 		TimeStateManager.TimeState.POWERUP:
-			set_saturation(1.5)  # High saturation
+			set_saturation(3.0)  # Hyper-real super colorful saturated look
 
 func _on_time_state_changed(new_state: int):
 	update_saturation_for_state(new_state)
