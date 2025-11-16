@@ -8,5 +8,5 @@ extends Resource
 @export var texture: Texture2D = null
 
 # Override this in subclasses to define pickup behavior
-func apply_effect(player_node: Node) -> void:
+func apply_effect(_player_node: Node) -> void:
 	pass

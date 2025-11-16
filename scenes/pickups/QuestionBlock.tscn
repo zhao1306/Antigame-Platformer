@@ -1,22 +1,20 @@
-[gd_scene load_steps=5 format=4 uid="uid://bq8x3k2m5n7qa"]
+[gd_scene load_steps=5 format=3 uid="uid://bq8x3k2m5n7qa"]
 
-[ext_resource type="Script" path="res://scripts/pickups/QuestionBlock.gd" id="1_question"]
-[ext_resource type="Texture2D" path="res://Assets (Little Runmo)/question_block.png" id="2_texture"]
+[ext_resource type="Script" uid="uid://cvu1h6os7qegs" path="res://scripts/pickups/QuestionBlock.gd" id="1_question"]
+[ext_resource type="Texture2D" uid="uid://c8fl27iyigrd6" path="res://Assets (Little Runmo)/question_block_small.png" id="2_anqou"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
 size = Vector2(16, 16)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2"]
-size = Vector2(16, 4)
+size = Vector2(16, 5)
 
 [node name="QuestionBlock" type="StaticBody2D"]
 script = ExtResource("1_question")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_texture")
+texture = ExtResource("2_anqou")
 hframes = 5
-vframes = 1
-frame = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_1")
@@ -24,6 +22,5 @@ shape = SubResource("RectangleShape2D_1")
 [node name="HitDetector" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitDetector"]
-position = Vector2(0, -10)
+position = Vector2(0, 6.5)
 shape = SubResource("RectangleShape2D_2")
-

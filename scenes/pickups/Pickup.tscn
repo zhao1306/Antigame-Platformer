@@ -6,13 +6,10 @@
 radius = 8.0
 
 [node name="Pickup" type="Area2D"]
-monitoring = true
 monitorable = false
 script = ExtResource("1_pickup")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-offset = Vector2(0, 0)
-centered = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_1")

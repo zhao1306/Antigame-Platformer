@@ -18,8 +18,6 @@ var coin_count: int = 0
 func _ready():
 	time_manager = get_node("/root/TimeStateManager")
 	# UIManager is now an autoload singleton - no need to find it
-	
-	print("Player ready! jump_height=", jump_height, " y_accel=", y_acceleration)
 
 func _physics_process(delta):
 	# Get time scale
