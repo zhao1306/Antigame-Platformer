@@ -50,7 +50,7 @@ var is_powerup_active: bool = false
 ## === AGE SYSTEM ===
 var age_timer: Timer = null
 var young_texture: Texture2D = load("res://Assets (Little Runmo)/young_age.png")
-var med_texture: Texture2D = load("res://Assets (Little Runmo)/med_age_.png")
+var med_texture: Texture2D = load("res://Assets (Little Runmo)/med_age.png")
 var old_texture: Texture2D = load("res://Assets (Little Runmo)/old_age.png")
 
 ## === ANIMATION SYSTEM ===

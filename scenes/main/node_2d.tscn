@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://bchv41i5md0ko" path="res://Assets (Little Runmo)/6_Backgrounds/Level_One_1.png" id="2_q6r6c"]
 [ext_resource type="PackedScene" uid="uid://cmcuucbqyuct1" path="res://scenes/ui/UI.tscn" id="2_ui"]
 [ext_resource type="Texture2D" uid="uid://bmo7n55npf4oo" path="res://Assets (Little Runmo)/2_Tileset/Surface/Grass_Block.png" id="3_epypp"]
-[ext_resource type="Texture2D" uid="uid://8arilwu71nvb" path="res://Assets (Little Runmo)/young_age.png" id="5_el5g4"]
+[ext_resource type="Texture2D" uid="uid://bssnqk38nusmn" path="res://Assets (Little Runmo)/young_age_.png" id="5_el5g4"]
 [ext_resource type="PackedScene" uid="uid://cxx5qkmpkrvkv" path="res://scenes/pickups/Pickup.tscn" id="6_hmsq2"]
 [ext_resource type="Script" uid="uid://clni6pvrr070n" path="res://scripts/pickups/CoinData.gd" id="7_11oak"]
 [ext_resource type="PackedScene" uid="uid://bq8x3k2m5n7qa" path="res://scenes/pickups/QuestionBlock.tscn" id="7_n6tn7"]
