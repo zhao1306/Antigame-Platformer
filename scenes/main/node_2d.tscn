@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://bchv41i5md0ko" path="res://Assets (Little Runmo)/6_Backgrounds/Level_One_1.png" id="2_q6r6c"]
 [ext_resource type="PackedScene" uid="uid://cmcuucbqyuct1" path="res://scenes/ui/UI.tscn" id="2_ui"]
 [ext_resource type="Texture2D" uid="uid://bmo7n55npf4oo" path="res://Assets (Little Runmo)/2_Tileset/Surface/Grass_Block.png" id="3_epypp"]
+[ext_resource type="Texture2D" uid="uid://8arilwu71nvb" path="res://Assets (Little Runmo)/young_age.png" id="5_el5g4"]
 [ext_resource type="PackedScene" uid="uid://cxx5qkmpkrvkv" path="res://scenes/pickups/Pickup.tscn" id="6_hmsq2"]
 [ext_resource type="Script" uid="uid://clni6pvrr070n" path="res://scripts/pickups/CoinData.gd" id="7_11oak"]
 [ext_resource type="PackedScene" uid="uid://bq8x3k2m5n7qa" path="res://scenes/pickups/QuestionBlock.tscn" id="7_n6tn7"]
@@ -14,8 +15,6 @@
 [ext_resource type="Resource" path="res://resources/pickups/drug_powerup_data.tres" id="12_vny8j"]
 
 [sub_resource type="Environment" id="Environment_1"]
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_0e48y"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_epypp"]
 radius = 7.0
@@ -376,14 +375,16 @@ position = Vector2(563, -32)
 script = ExtResource("1_wtcfe")
 
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
-position = Vector2(-5.9604616e-08, -1.4305115e-06)
-scale = Vector2(14, 29.999998)
-texture = SubResource("PlaceholderTexture2D_0e48y")
+position = Vector2(-5.9604616e-08, 2.9999986)
+texture = ExtResource("5_el5g4")
+hframes = 3
+vframes = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 shape = SubResource("CapsuleShape2D_epypp")
 
 [node name="Camera2D" type="Camera2D" parent="Player" groups=["main_camera"]]
+zoom = Vector2(3, 3)
 position_smoothing_enabled = true
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
@@ -410,67 +411,56 @@ tile_set = SubResource("TileSet_q6r6c")
 [node name="Pickup" parent="." instance=ExtResource("6_hmsq2")]
 position = Vector2(1700, -78)
 collision_layer = 1
-monitorable = false
 data = SubResource("Resource_vny8j")
 
 [node name="Pickup" parent="Pickup" instance=ExtResource("6_hmsq2")]
 position = Vector2(1700, -78)
 collision_layer = 1
-monitorable = false
 data = SubResource("Resource_vny8j")
 
 [node name="Pickup2" parent="Pickup" instance=ExtResource("6_hmsq2")]
 position = Vector2(1700, -78)
 collision_layer = 1
-monitorable = false
 data = SubResource("Resource_vny8j")
 
 [node name="Pickup" parent="Pickup/Pickup2" instance=ExtResource("6_hmsq2")]
 position = Vector2(1700, -78)
 collision_layer = 1
-monitorable = false
 data = SubResource("Resource_vny8j")
 
 [node name="Pickup2" parent="." instance=ExtResource("6_hmsq2")]
 position = Vector2(1720, -78)
 collision_layer = 1
-monitorable = false
 data = SubResource("Resource_el5g4")
 
 [node name="Pickup3" parent="." instance=ExtResource("6_hmsq2")]
 position = Vector2(1563, -105)
 collision_layer = 1
-monitorable = false
 data = SubResource("Resource_vny8j")
 
 [node name="Pickup4" parent="." instance=ExtResource("6_hmsq2")]
 position = Vector2(1546, -105)
 collision_layer = 1
-monitorable = false
 data = SubResource("Resource_vny8j")
 
 [node name="Pickup5" parent="." instance=ExtResource("6_hmsq2")]
 position = Vector2(1530, -105)
 collision_layer = 1
-monitorable = false
 data = SubResource("Resource_vny8j")
 
 [node name="Pickup6" parent="." instance=ExtResource("6_hmsq2")]
 position = Vector2(1850, -200)
 collision_layer = 1
-monitorable = false
 data = SubResource("Resource_kywn2")
 
 [node name="Pickup7" parent="." instance=ExtResource("6_hmsq2")]
 position = Vector2(1832, -201)
 collision_layer = 1
-monitorable = false
 data = SubResource("Resource_h0xs0")
 
 [node name="Pickup8" parent="." instance=ExtResource("6_hmsq2")]
 position = Vector2(1867, -199)
 collision_layer = 1
-monitorable = false
 data = SubResource("Resource_vvebl")
 
 [node name="QuestionBlock" parent="." instance=ExtResource("7_n6tn7")]
@@ -480,7 +470,6 @@ powerup_data = SubResource("Resource_m64vw")
 [node name="Pickup9" parent="." instance=ExtResource("6_hmsq2")]
 position = Vector2(-254, -36)
 collision_layer = 1
-monitorable = false
 data = SubResource("Resource_n6tn7")
 
 [node name="QuestionBlock2" parent="." instance=ExtResource("7_n6tn7")]
