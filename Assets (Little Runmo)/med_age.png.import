@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cmab7rnr8gqx6"
-path="res://.godot/imported/med_age_.png-f86593e089408ea9aa8156c131d1ae01.ctex"
+uid="uid://cu7adar6f2vbi"
+path="res://.godot/imported/med_age.png-474e36dd3a96afc86bc0f4f65279db89.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets (Little Runmo)/med_age_.png"
-dest_files=["res://.godot/imported/med_age_.png-f86593e089408ea9aa8156c131d1ae01.ctex"]
+source_file="res://Assets (Little Runmo)/med_age.png"
+dest_files=["res://.godot/imported/med_age.png-474e36dd3a96afc86bc0f4f65279db89.ctex"]
 
 [params]
 
