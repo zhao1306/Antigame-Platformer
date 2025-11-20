@@ -15,15 +15,14 @@ run/main_scene="uid://wgbf1aaqpkev"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 
-[display]
-
-window/stretch/mode="viewport"
-window/stretch/aspect="keep"
-
 [autoload]
 
 TimeStateManager="*res://scripts/managers/TimeStateManager.gd"
 UIManager="*res://scripts/managers/UIManager.gd"
+
+[display]
+
+window/stretch/mode="viewport"
 
 [rendering]
 

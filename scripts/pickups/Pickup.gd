@@ -159,25 +159,24 @@ func _physics_process(delta):
 	# Use move_and_slide() for proper collision handling (Godot best practice)
 	move_and_slide()
 	
-	# Check collisions after movement
-	if is_on_wall():
-		# Check if we hit a player instead of a wall
-		var collision_count = get_slide_collision_count()
-		var hit_player = false
+	# Check ALL collisions after movement for player contact
+	# This handles collisions from any direction (walls, floors, ceilings)
+	var collision_count = get_slide_collision_count()
+	var hit_player = false
+	
+	for i in range(collision_count):
+		var collision = get_slide_collision(i)
+		var collider = collision.get_collider()
 		
-		for i in range(collision_count):
-			var collision = get_slide_collision(i)
-			var collider = collision.get_collider()
-			
-			# Check if collider is a player
-			if collider and collider.is_in_group("player"):
-				hit_player = true
-				_collect_pickup(collider)
-				break  # Exit loop since we're collecting
-		
-		# Only flip direction if we didn't hit a player
-		if not hit_player:
-			move_direction.x *= -1
+		# Check if collider is a player
+		if collider and collider.is_in_group("player"):
+			hit_player = true
+			_collect_pickup(collider)
+			return  # Exit immediately since we're collecting
+	
+	# Only handle wall collisions if we didn't hit a player
+	if is_on_wall() and not hit_player:
+		move_direction.x *= -1
 
 func set_movement_enabled(enabled: bool):
 	movement_enabled = enabled

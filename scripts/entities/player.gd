@@ -8,6 +8,8 @@ extends CharacterBody2D
 @export_category("Jumping and Gravity")
 @export_range(100, 5000) var jump_height: float = 375.0
 @export_range(100, 3000) var y_acceleration: float = 800.0
+# Velocity reduction factor when switching time modes (0.0 = no velocity, 1.0 = full velocity)
+@export_range(0.0, 1.0) var mode_change_velocity_retention: float = 0.7
 
 ## === CONSTANTS ===
 const AGE_YOUNG_THRESHOLD: int = 40
@@ -42,6 +44,7 @@ var ui_manager: Node
 var coin_count: int = 0
 var age: int = 0
 var facing_right: bool = true
+var previous_time_scale: float = 1.0
 
 ## === POWER-UP SYSTEM ===
 var powerup_timer: Timer = null
@@ -67,21 +70,30 @@ func _ready() -> void:
 		push_error("Sprite2D node not found!")
 		return
 	
+	if time_manager:
+		previous_time_scale = time_manager.get_time_scale()
+		time_manager.time_state_changed.connect(_on_time_state_changed)
+	
 	_initialize_age_system()
 	_update_age_sprite()
 
 func _physics_process(delta: float) -> void:
 	var time_scale: float = time_manager.get_time_scale() if time_manager else 1.0
-	var accel_scale: float = pow(time_scale, 2)
 	
-	# Calculate scaled values
-	var scaled_max_speed: float = max_speed * time_scale
-	var effective_x_accel: float = x_acceleration * accel_scale
-	var effective_y_accel: float = y_acceleration * accel_scale
+	# 1. Calculate Drag Scaling FIRST
 	var effective_x_drag: float = pow(BASE_X_DRAG, time_scale)
 	var effective_y_drag: float = pow(BASE_Y_DRAG, time_scale)
+
+	# 2. Calculate Geometric Series Correction
+	# This adjusts acceleration to account for the drag applied during the time skip
+	var x_correction: float = (1.0 - effective_x_drag) / (1.0 - BASE_X_DRAG)
+	var y_correction: float = (1.0 - effective_y_drag) / (1.0 - BASE_Y_DRAG)
+
+	# 3. Apply Correction to Acceleration
+	var effective_x_accel: float = x_acceleration * time_scale * x_correction
+	var effective_y_accel: float = y_acceleration * time_scale * y_correction
 	
-	# Clamp velocity when on floor
+	var scaled_max_speed: float = max_speed * time_scale
 	if is_on_floor():
 		velocity.x = clamp(velocity.x, -scaled_max_speed, scaled_max_speed)
 	
@@ -94,14 +106,21 @@ func _physics_process(delta: float) -> void:
 		facing_right = move_input > 0
 	
 	# Apply horizontal movement
-	_apply_horizontal_movement(move_input, effective_x_accel, effective_x_drag, scaled_max_speed, delta)
+	_apply_horizontal_movement(move_input, effective_x_accel, effective_x_drag, time_scale, delta)
 	
 	# Apply gravity
 	if not is_on_floor():
 		velocity.y += effective_y_accel * delta
 		velocity.y *= effective_y_drag
+		# Clamp vertical velocity to prevent extreme fall speeds in fast mode
+		# Using a reasonable terminal velocity scaled by time_scale
+		var max_fall_speed: float = 2000.0 * time_scale
+		velocity.y = min(velocity.y, max_fall_speed)
 	
 	# Handle jumping
+	# Jump should feel similar in game-time, but in slow mode we get a bit more distance
+	# because drag is applied more times but is weaker per frame, creating a net effect
+	# Using just jump_height (no scaling) gives slow mode slightly more height naturally
 	if jump_pressed and is_on_floor():
 		velocity.y = -jump_height * time_scale
 	
@@ -110,15 +129,31 @@ func _physics_process(delta: float) -> void:
 	
 	# Move the character
 	move_and_slide()
+	
+	# Update previous time scale for next frame
+	if time_manager:
+		previous_time_scale = time_manager.get_time_scale()
+
+## === TIME MODE CHANGE HANDLER ===
+func _on_time_state_changed(new_state: int) -> void:
+	# Apply velocity nerf when switching time modes to prevent super jumps
+	# This reduces velocity by the retention factor, making mode changes feel more controlled
+	velocity.x *= mode_change_velocity_retention
+	velocity.y *= mode_change_velocity_retention
 
 ## === MOVEMENT ===
-func _apply_horizontal_movement(move_input: float, accel: float, drag: float, max_speed: float, delta: float) -> void:
+func _apply_horizontal_movement(move_input: float, accel: float, drag: float, time_scale: float, delta: float) -> void:
+	var scaled_max_speed: float = max_speed * time_scale
+	
 	if move_input != 0:
 		var same_direction: bool = (move_input > 0 and velocity.x >= 0) or (move_input < 0 and velocity.x <= 0)
-		var can_accelerate: bool = not (same_direction and abs(velocity.x) >= max_speed)
+		var can_accelerate: bool = not (same_direction and abs(velocity.x) >= scaled_max_speed)
 		
 		if can_accelerate:
 			velocity.x += move_input * accel * delta
+			# Clamp after acceleration to prevent frame overshoot
+			# This ensures we never exceed max_speed, even if acceleration is large (fast mode)
+			velocity.x = clamp(velocity.x, -scaled_max_speed, scaled_max_speed)
 	else:
 		var drag_multiplier: float = FLOOR_DRAG_MULTIPLIER if is_on_floor() else 1.0
 		velocity.x *= drag * drag_multiplier
